@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-hooks/refs */
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useMemo, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { useLocale } from "next-intl";
-import { useGetProductsQuery } from "@/services/api";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useGetProductsQuery, useGetProductBySlugQuery } from "@/services/api";
 import type {
   Product as ApiProduct,
   Locale,
@@ -22,6 +21,7 @@ interface ProductCardData {
   image: string;
   category: ProductCategory;
   price?: number;
+  slug: string;
   badge?: string;
 }
 
@@ -105,7 +105,6 @@ const COPY: Record<
     error: "Unable to load products. Please try again later.",
   },
 };
-
 function mapApiProductsToCardData(
   apiProducts: ApiProduct[]
 ): ProductCardData[] {
@@ -123,26 +122,60 @@ function mapApiProductsToCardData(
       : p.isSignatureLineup
       ? "Signature"
       : undefined,
+    slug: p.slug?.toLowerCase(),
   }));
+}
+
+function mapViewProductToCardData(p: ApiProduct): ProductCardData {
+  const fallback = "/Product/product1.jpg";
+  return {
+    id: p._id,
+    name: p.name,
+    description: p.shortDescription || p.description || "",
+    image: p.image?.url || fallback,
+    category: p.category || "other",
+    price: p.price,
+    slug: p.slug?.toLowerCase() || "",
+    badge: p.isBestSeller
+      ? "Best seller"
+      : p.isSignatureLineup
+      ? "Signature"
+      : undefined,
+  };
 }
 
 export default function ProductsPage() {
   const locale = useLocale() as Locale;
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const copy = COPY[locale] ?? COPY.vi;
   const gridRef = useRef<HTMLDivElement | null>(null);
 
-  const { data, isLoading, isError, error, isFetching } = useGetProductsQuery(
-    {
-      locale,
-      limit: 40,
-    },
-    { refetchOnMountOrArgChange: true }
-  );
-
+  const initialSlugFilter =
+    searchParams?.get("slug")?.toLowerCase().trim() || "";
+  const [slugFilter, setSlugFilter] = useState(initialSlugFilter);
   const [category, setCategory] = useState<Category>("all");
   const INITIAL_VISIBLE = 8;
   const LOAD_STEP = 8;
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
+
+  const { data, isLoading, isError, error, isFetching } = useGetProductsQuery(
+    {
+      locale,
+      limit: 100,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
+
+  const {
+    data: slugProduct,
+    isFetching: slugFetching,
+    isError: slugError,
+  } = useGetProductBySlugQuery(
+    { locale, slug: slugFilter },
+    { skip: !slugFilter }
+  );
 
   // Cache per-locale products so switching locale shows instantly if already fetched
   const cachedProducts = useRef<Partial<Record<Locale, ProductCardData[]>>>({});
@@ -194,14 +227,33 @@ export default function ProductsPage() {
   }, [availableCategories]);
 
   const filteredProducts = useMemo(() => {
-    if (category === "all") return products;
-    return products.filter((p) => p.category === category);
-  }, [products, category]);
+    if (slugFilter) {
+      if (slugProduct)
+        return [mapViewProductToCardData(slugProduct as ApiProduct)];
+      return [];
+    }
+
+    let result = products;
+
+    if (category !== "all") {
+      result = result.filter((p) => p.category === category);
+    }
+
+    return result;
+  }, [products, category, slugFilter, slugProduct]);
 
   // Reset visible count on category change
   useEffect(() => {
     setVisibleCount(INITIAL_VISIBLE);
   }, [category]);
+
+  // Sync slug filter from URL (?slug=...), e.g. click from Best Sellers
+  useEffect(() => {
+    const nextSlug = searchParams?.get("slug")?.toLowerCase().trim() || "";
+    setSlugFilter(nextSlug);
+    setCategory("all");
+    setVisibleCount(INITIAL_VISIBLE);
+  }, [searchParams]);
 
   useEffect(() => {
     if (filteredProducts.length === 0) {
@@ -218,6 +270,21 @@ export default function ProductsPage() {
   const hasMore = filteredProducts.length > visibleCount;
   const showingAll =
     filteredProducts.length > INITIAL_VISIBLE && !hasMore && visibleCount > 0;
+
+  function clearSlugFilter() {
+    if (!slugFilter) return;
+    setSlugFilter("");
+    router.replace(pathname, { scroll: false });
+    setVisibleCount(INITIAL_VISIBLE);
+  }
+
+  function handleCategoryChange(value: Category) {
+    // Khi đổi category, bỏ lọc slug để filter hoạt động như bình thường
+    if (slugFilter) {
+      clearSlugFilter();
+    }
+    setCategory(value);
+  }
 
   const handleLoadMore = () => {
     setVisibleCount((c) => Math.min(c + LOAD_STEP, filteredProducts.length));
@@ -274,7 +341,7 @@ export default function ProductsPage() {
         {/* Filter tabs */}
         <ProductFilters
           category={category}
-          onChange={setCategory}
+          onChange={handleCategoryChange}
           locale={locale}
           options={filterOptions}
         />

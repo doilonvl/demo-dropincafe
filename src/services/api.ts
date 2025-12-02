@@ -240,6 +240,19 @@ export const api = createApi({
       providesTags: [{ type: "Products", id: "SIGNATURE" }],
     }),
 
+    getProductBySlug: builder.query<Product, { locale: Locale; slug: string }>({
+      query: ({ locale, slug }) => ({
+        url: `/products/${slug}`,
+        params: { locale },
+      }),
+      transformResponse: (response: ProductDto, _meta, arg) =>
+        mapProductDtoToView(response, arg.locale),
+      providesTags: (result) =>
+        result
+          ? [{ type: "Products", id: result._id }]
+          : [{ type: "Products", id: "DETAIL" }],
+    }),
+
     // -------- PRODUCTS (ADMIN) --------
     getProductsAdmin: builder.query<
       Paged<ProductDto>,
@@ -354,6 +367,7 @@ export const {
   useGetProductsQuery,
   useGetBestSellersQuery,
   useGetSignatureLineupQuery,
+  useGetProductBySlugQuery,
   useGetProductsAdminQuery,
   useCreateProductMutation,
   useUpdateProductMutation,

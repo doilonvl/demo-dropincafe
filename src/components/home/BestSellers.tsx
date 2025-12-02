@@ -10,6 +10,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import FadeIn from "@/components/animation/FadeIn";
 import { useGetBestSellersQuery } from "@/services/api";
 import type { Product as ApiProduct, Locale } from "@/types/content";
@@ -24,6 +25,7 @@ type BestSeller = {
   description: string;
   stats: Stat[];
   image: string;
+  slug?: string;
 };
 
 const AUTOPLAY_DELAY = 4000;
@@ -96,6 +98,7 @@ function mapApiProductToBestSeller(product: ApiProduct): BestSeller {
     name: product.name,
     description: product.shortDescription || product.description || "",
     image: product.image?.url || "/PShowcase/5.jpg",
+    slug: product.slug,
     stats:
       statsFromApi && statsFromApi.length > 0 ? statsFromApi : fallbackStats,
   };
@@ -443,8 +446,16 @@ export default function BestSellersCarousel() {
 
                           <div className="flex flex-1 items-center">
                             <Link
-                              href="/products"
+                              href={
+                                item.slug
+                                  ? {
+                                      pathname: "/products",
+                                      query: { slug: item.slug },
+                                    }
+                                  : "/products"
+                              }
                               className="block h-80 w-full overflow-hidden rounded-tl-3xl rounded-bl-3xl bg-stone-100 md:h-[420px] lg:h-full"
+                              onPointerDown={(e) => e.stopPropagation()}
                               onDragStart={(e) => e.preventDefault()}
                             >
                               <img
@@ -486,4 +497,3 @@ export default function BestSellersCarousel() {
     </section>
   );
 }
-import Link from "next/link";

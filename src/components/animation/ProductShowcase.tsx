@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 "use client";
@@ -6,6 +7,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { Link } from "@/i18n/navigation";
 
 type Product = {
   name: string;
@@ -87,11 +89,11 @@ export default function ProductShowcase({
       {rows.map((pair, rowIdx) => (
         <div className="row" key={rowIdx}>
           {pair.map((item, idx) => (
-            <a
+            <Link
               className={`work-item work-item-link ${
                 idx === 1 ? "hidden sm:block" : ""
               }`}
-              href="/products"
+              href={item.route as any}
               key={item.route}
             >
               <div className="work-item-img">
@@ -116,7 +118,7 @@ export default function ProductShowcase({
                 <h3>{item.name}</h3>
                 <p>{item.description}</p>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       ))}

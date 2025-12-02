@@ -113,7 +113,7 @@ export default function HomePage() {
                   fill
                   sizes="(min-width: 1024px) 320px, 100vw"
                   className="object-cover"
-                  loading="lazy"
+                  loading="eager"
                 />
               </div>
             </div>
@@ -139,7 +139,7 @@ export default function HomePage() {
                   fill
                   sizes="(min-width: 1024px) 320px, 100vw"
                   className="object-cover"
-                  loading="lazy"
+                  loading="eager"
                 />
               </div>
             </div>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 "use client";
 
@@ -274,7 +275,19 @@ export function StackSlider({ slides, className }: StackSliderProps) {
   useEffect(() => {
     if (!containerRef.current || memoSlides.length === 0) return;
 
-    const initSlider = () => {
+    let cancelled = false;
+
+    const initSlider = async () => {
+      // Chờ font sẵn sàng để tránh SplitText cảnh báo
+      try {
+        if ((document as any).fonts?.ready) {
+          await (document as any).fonts.ready;
+        }
+      } catch {
+        // ignore
+      }
+      if (cancelled || !containerRef.current) return;
+
       sliderRef.current?.destroy();
       lastWidthRef.current = window.innerWidth;
       widthBucketRef.current = getWidthBucket();
@@ -314,6 +327,7 @@ export function StackSlider({ slides, className }: StackSliderProps) {
       window.removeEventListener("resize", handleResize);
       if (resizeTimer) clearTimeout(resizeTimer);
       sliderRef.current?.destroy();
+      cancelled = true;
     };
   }, [memoSlides]);
 

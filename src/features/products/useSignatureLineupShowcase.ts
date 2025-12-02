@@ -73,7 +73,7 @@ function mapApiToShowcaseItem(p: ApiProduct): ShowcaseItem {
     name: p.name,
     description: p.shortDescription || p.description || "",
     img: safeImg,
-    route: `/products/${p.slug}`,
+    route: p.slug ? `/products?slug=${encodeURIComponent(p.slug)}` : "/products",
   };
 }
 
