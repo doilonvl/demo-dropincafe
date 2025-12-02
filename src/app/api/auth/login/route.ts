@@ -36,13 +36,49 @@ export async function POST(req: Request) {
     status: upstream.status,
   });
 
-  const setCookies =
-    (upstream.headers as any).getSetCookie?.() ??
-    upstream.headers.get("set-cookie")?.split(/,(?=[^;]+=[^;]+;)/g) ??
-    [];
+  // Lấy token từ payload để tự set cookie với domain hợp lệ (tránh domain sai từ upstream)
+  const isProd = process.env.NODE_ENV === "production";
+  const access =
+    (data as any)?.access_token ??
+    (data as any)?.accessToken ??
+    (data as any)?.token;
+  const refresh =
+    (data as any)?.refresh_token ??
+    (data as any)?.refreshToken ??
+    (data as any)?.refresh;
 
-  for (const cookie of setCookies) {
-    res.headers.append("set-cookie", cookie);
+  if (access) {
+    res.cookies.set("access_token", access, {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 15,
+    });
+    res.cookies.set("access_token_public", access, {
+      httpOnly: false,
+      secure: isProd,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 15,
+    });
+  }
+
+  if (refresh) {
+    res.cookies.set("refresh_token", refresh, {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30,
+    });
+    res.cookies.set("refresh_token_public", refresh, {
+      httpOnly: false,
+      secure: isProd,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30,
+    });
   }
 
   return res;
