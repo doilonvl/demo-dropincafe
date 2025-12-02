@@ -5,14 +5,16 @@ export default function FadeIn({
   children,
   delay = 0,
   once = true,
-  amount = 0.2,
+  amount = 0.1,
   direction = "up",
+  margin = "-10% 0px -10% 0px",
 }: {
   children: React.ReactNode;
   delay?: number;
   once?: boolean;
   amount?: number;
   direction?: "up" | "down" | "left" | "right";
+  margin?: string;
 }) {
   const distance = 40; // px
   const initial =
@@ -30,7 +32,7 @@ export default function FadeIn({
     <motion.div
       initial={initial}
       whileInView={animate}
-      viewport={{ once, amount }}
+      viewport={{ once, amount, margin }}
       transition={{ duration: 0.8, ease: "easeOut", delay }}
     >
       {children}

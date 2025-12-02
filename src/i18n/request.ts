@@ -10,7 +10,9 @@ function isLocale(input: string): input is Locale {
 }
 
 export default getRequestConfig(async ({ requestLocale }) => {
+  // Lock default to Vietnamese unless the locale is explicitly provided as "en"
   let locale = (await requestLocale) ?? defaultLocale;
+  // if (locale !== "en") locale = defaultLocale;
   if (!isLocale(locale)) locale = defaultLocale;
 
   const messages = (await import(`@/i18n/message/${locale}.json`)).default;

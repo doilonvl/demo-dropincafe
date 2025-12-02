@@ -9,7 +9,10 @@ import {
   useState,
   type PointerEvent as ReactPointerEvent,
 } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import FadeIn from "@/components/animation/FadeIn";
+import { useGetBestSellersQuery } from "@/services/api";
+import type { Product as ApiProduct, Locale } from "@/types/content";
 
 type Stat = {
   label: string;
@@ -23,7 +26,9 @@ type BestSeller = {
   image: string;
 };
 
-const bestSellers: BestSeller[] = [
+const AUTOPLAY_DELAY = 4000;
+
+const FALLBACK_BEST_SELLERS: BestSeller[] = [
   {
     name: "Hanoi Egg Coffee Signature",
     image: "/PShowcase/5.jpg",
@@ -62,7 +67,7 @@ const bestSellers: BestSeller[] = [
   },
   {
     name: "Peach Lemongrass Brew",
-    image: "/PShowcase/8.jpg",
+    image: "/PShowcase/4.jpg",
     description:
       "Cold-brewed white tea infused with peach, lemongrass, and citrus peel. Light, fragrant, and perfect for watching the trains glide past.",
     stats: [
@@ -74,7 +79,27 @@ const bestSellers: BestSeller[] = [
   },
 ];
 
-const AUTOPLAY_DELAY = 4000;
+function mapApiProductToBestSeller(product: ApiProduct): BestSeller {
+  const statsFromApi =
+    product.bestSellerStats && product.bestSellerStats.length > 0
+      ? product.bestSellerStats.map((s) => ({ label: s.label, value: s.value }))
+      : null;
+
+  const fallbackStats: Stat[] = [
+    { label: "Guest favorite", value: 95 },
+    { label: "Flavor balance", value: 93 },
+    { label: "Aroma", value: 94 },
+    { label: "Order again", value: 96 },
+  ];
+
+  return {
+    name: product.name,
+    description: product.shortDescription || product.description || "",
+    image: product.image?.url || "/PShowcase/5.jpg",
+    stats:
+      statsFromApi && statsFromApi.length > 0 ? statsFromApi : fallbackStats,
+  };
+}
 
 function ProgressBar({ label, value, active }: Stat & { active: boolean }) {
   const [visualValue, setVisualValue] = useState(0);
@@ -153,13 +178,34 @@ function ProgressBar({ label, value, active }: Stat & { active: boolean }) {
 }
 
 export default function BestSellersCarousel() {
+  const locale = useLocale() as Locale;
+  const t = useTranslations("bestSellers");
+
+  const { data, isLoading, isError } = useGetBestSellersQuery({
+    locale,
+    limit: 4,
+  });
+
+  const bestSellers: BestSeller[] = useMemo(() => {
+    if (data?.items && data.items.length > 0) {
+      return data.items.map(mapApiProductToBestSeller);
+    }
+
+    if (isError) {
+      return FALLBACK_BEST_SELLERS;
+    }
+
+    return [];
+  }, [data, isError]);
+
   const total = bestSellers.length;
+
   const slides = useMemo(
-    () => [...bestSellers, ...bestSellers, ...bestSellers],
-    []
+    () => (total ? [...bestSellers, ...bestSellers, ...bestSellers] : []),
+    [bestSellers, total]
   );
 
-  const [index, setIndex] = useState(total);
+  const [index, setIndex] = useState(0);
   const [enableTransition, setEnableTransition] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
@@ -170,12 +216,21 @@ export default function BestSellersCarousel() {
   const dragRef = useRef({
     startX: 0,
     dragging: false,
-    baseIndex: total,
+    baseIndex: 0,
   });
+
+  // When total > 0, reset index to the middle "loop" for smoother wrap
+  useEffect(() => {
+    if (total > 0) {
+      setIndex(total);
+      dragRef.current.baseIndex = total;
+    }
+  }, [total]);
 
   const visibleIndex = total ? ((index % total) + total) % total : 0;
 
   const handleTransitionEnd = () => {
+    if (!total) return;
     setIndex((current) => {
       if (current >= total * 2) {
         setEnableTransition(false);
@@ -278,148 +333,157 @@ export default function BestSellersCarousel() {
     }
   };
 
-  if (total === 0) return null;
-
   const trackTransform = `translateX(calc(-${index * 100}% + ${dragOffset}%))`;
 
   return (
-    <section id="best-sellers" className="py-16 md:py-24">
-      <div className="container mx-auto px-4">
+    <section id="best-sellers" className="py-10 md:py-12">
+      <div className="mx-auto max-w-7xl px-4">
         <FadeIn direction="up" amount={0.3}>
           <div className="flex flex-col items-start md:items-center lg:items-start">
             <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-600">
-              Best Sellers
+              {t("eyebrow")}
             </h2>
             <p className="mt-3 text-3xl font-semibold text-stone-900 md:text-4xl">
-              Drinks that keep regulars coming back
+              {t("title")}
             </p>
             <p className="mt-3 max-w-2xl text-sm text-stone-500">
-              Chúng tôi muốn tạo ra một điểm dừng nhỏ, nơi bạn có thể ghé vào
-              bất chợt để ngồi đủ lâu nhìn một chuyến tàu đi qua, trò chuyện với
-              bạn đồng hành, hoặc hoàn thành nốt vài dòng công việc. Từng chi
-              tiết – từ menu, ánh sáng đến chỗ ngồi sát đường ray – đều được
-              thiết kế để giúp bạn cảm thấy được chào đón, kết nối hơn với thành
-              phố này và với nhau.
+              {t("intro")}
             </p>
           </div>
         </FadeIn>
 
-        <div className="mt-12">
-          <div
-            className="relative overflow-hidden select-none"
-            ref={viewportRef}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerEnd}
-            onPointerLeave={handlePointerEnd}
-          >
-            <div className="absolute inset-y-0 left-0 z-10 hidden items-center lg:flex">
-              <button
-                type="button"
-                aria-label="Previous"
-                className="rounded-full cursor-pointer border border-amber-200 bg-white/80 px-4 py-2 text-sm font-medium text-stone-800 shadow-sm hover:bg-white"
-                onClick={goPrev}
-                onPointerDown={(e) => e.stopPropagation()}
-                onPointerUp={(e) => e.stopPropagation()}
-              >
-                <span aria-hidden="true">←</span>
-              </button>
-            </div>
+        {isLoading && total === 0 && (
+          <p className="mt-10 text-sm text-stone-500">{t("loading")}</p>
+        )}
 
-            <div className="absolute inset-y-0 right-0 z-10 hidden items-center lg:flex">
-              <button
-                type="button"
-                aria-label="Next"
-                className="rounded-full cursor-pointer border border-amber-200 bg-white/80 px-4 py-2 text-sm font-medium text-stone-800 shadow-sm hover:bg-white"
-                onClick={goNext}
-                onPointerDown={(e) => e.stopPropagation()}
-                onPointerUp={(e) => e.stopPropagation()}
-              >
-                <span aria-hidden="true">→</span>
-              </button>
-            </div>
+        {!isLoading && total === 0 && !isError && (
+          <p className="mt-10 text-sm text-stone-500">{t("empty")}</p>
+        )}
 
-            <div className="overflow-hidden">
-              <div
-                ref={trackRef}
-                onTransitionEnd={handleTransitionEnd}
-                className={`flex ${
-                  enableTransition && !isDragging
-                    ? "transition-transform duration-500 ease-out"
-                    : ""
-                }`}
-                style={{ transform: trackTransform }}
-              >
-                {slides.map((item, idx) => {
-                  const isActive =
-                    item.name === bestSellers[visibleIndex].name &&
-                    idx % total === visibleIndex;
+        {total > 0 && (
+          <div className="mt-12">
+            <div
+              className="relative overflow-hidden select-none"
+              ref={viewportRef}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerEnd}
+              onPointerLeave={handlePointerEnd}
+            >
+              <div className="absolute inset-y-0 left-0 z-10 hidden items-center lg:flex">
+                <button
+                  type="button"
+                  aria-label={t("prev")}
+                  className="rounded-full cursor-pointer border border-amber-200 bg-white/80 px-4 py-2 text-sm font-medium text-stone-800 shadow-sm hover:bg-white"
+                  onClick={goPrev}
+                  onPointerDown={(e) => e.stopPropagation()}
+                  onPointerUp={(e) => e.stopPropagation()}
+                >
+                  <span aria-hidden="true">‹</span>
+                </button>
+              </div>
 
-                  return (
-                    <div
-                      key={`${item.name}-${idx}`}
-                      className="w-full shrink-0 px-1 md:px-3 bg-amber-50 shadow-lg"
-                    >
-                      <div className="flex flex-col gap-10 p-6 lg:h-[520px] lg:flex-row lg:items-stretch">
-                        <div className="flex-1 space-y-4 text-stone-900">
-                          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-500">
-                            Signature drink
-                          </p>
-                          <h3 className="text-2xl font-semibold md:text-3xl">
-                            {item.name}
-                          </h3>
-                          <p className="text-sm text-stone-600">
-                            {item.description}
-                          </p>
+              <div className="absolute inset-y-0 right-0 z-10 hidden items-center lg:flex">
+                <button
+                  type="button"
+                  aria-label={t("next")}
+                  className="rounded-full cursor-pointer border border-amber-200 bg-white/80 px-4 py-2 text-sm font-medium text-stone-800 shadow-sm hover:bg-white"
+                  onClick={goNext}
+                  onPointerDown={(e) => e.stopPropagation()}
+                  onPointerUp={(e) => e.stopPropagation()}
+                >
+                  <span aria-hidden="true">›</span>
+                </button>
+              </div>
 
-                          <div className="mt-8 grid gap-6 md:grid-cols-2">
-                            {item.stats.map((stat) => (
-                              <ProgressBar
-                                key={`${item.name}-${stat.label}`}
-                                label={stat.label}
-                                value={stat.value}
-                                active={isActive}
-                              />
-                            ))}
+              <div className="overflow-hidden">
+                <div
+                  ref={trackRef}
+                  onTransitionEnd={handleTransitionEnd}
+                  className={`flex ${
+                    enableTransition && !isDragging
+                      ? "transition-transform duration-500 ease-out"
+                      : ""
+                  }`}
+                  style={{ transform: trackTransform }}
+                >
+                  {slides.map((item, idx) => {
+                    const isActive =
+                      item.name === bestSellers[visibleIndex].name &&
+                      idx % total === visibleIndex;
+
+                    return (
+                      <div
+                        key={`${item.name}-${idx}`}
+                        className="w-full shrink-0 px-1 md:px-3 bg-amber-50 shadow-lg"
+                      >
+                        <div className="flex flex-col gap-10 p-6 lg:h-[520px] lg:flex-row lg:items-stretch">
+                          <div className="flex-1 space-y-4 text-stone-900">
+                            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-500">
+                              {t("signatureLabel")}
+                            </p>
+                            <h3 className="text-2xl font-semibold md:text-3xl">
+                              {item.name}
+                            </h3>
+                            <p className="text-sm text-stone-600">
+                              {item.description}
+                            </p>
+
+                            <div className="mt-8 grid gap-6 md:grid-cols-2">
+                              {item.stats.map((stat) => (
+                                <ProgressBar
+                                  key={`${item.name}-${stat.label}`}
+                                  label={stat.label}
+                                  value={stat.value}
+                                  active={isActive}
+                                />
+                              ))}
+                            </div>
                           </div>
-                        </div>
 
-                        <div className="flex flex-1 items-center">
-                          <div className="h-80 w-full overflow-hidden rounded-tl-3xl rounded-bl-3xl bg-stone-100 md:h-[420px] lg:h-full">
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="h-full w-full object-cover"
-                              draggable={false}
-                            />
+                          <div className="flex flex-1 items-center">
+                            <Link
+                              href="/products"
+                              className="block h-80 w-full overflow-hidden rounded-tl-3xl rounded-bl-3xl bg-stone-100 md:h-[420px] lg:h-full"
+                              onDragStart={(e) => e.preventDefault()}
+                            >
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="h-full w-full object-cover"
+                                draggable={false}
+                                onDragStart={(e) => e.preventDefault()}
+                              />
+                            </Link>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="mt-10 flex justify-center gap-3">
-            {bestSellers.map((_, idx) => {
-              const isActive = idx === visibleIndex;
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => goTo(idx)}
-                  className={`h-2 rounded-full border border-amber-500 transition-all cursor-pointer ${
-                    isActive ? "w-6 bg-amber-500" : "w-2 bg-transparent"
-                  }`}
-                  aria-label={`Go to slide ${idx + 1}`}
-                />
-              );
-            })}
+            <div className="mt-10 flex justify-center gap-3">
+              {bestSellers.map((_, idx) => {
+                const isActive = idx === visibleIndex;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => goTo(idx)}
+                    className={`h-2 rounded-full border border-amber-500 transition-all cursor-pointer ${
+                      isActive ? "w-6 bg-amber-500" : "w-2 bg-transparent"
+                    }`}
+                    aria-label={t("goToSlide", { index: idx + 1 })}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
 }
+import Link from "next/link";

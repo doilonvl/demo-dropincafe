@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-
 import {
   CheckCircle2,
   Clock,
@@ -14,39 +13,44 @@ import {
   XCircle,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type DayHours = { day: string; start: string; end: string };
 
-const weeklyHours: DayHours[] = [
-  { day: "Thứ Hai", start: "07:30", end: "22:30" },
-  { day: "Thứ Ba", start: "07:30", end: "22:30" },
-  { day: "Thứ Tư", start: "07:30", end: "22:30" },
-  { day: "Thứ Năm", start: "07:30", end: "22:30" },
-  { day: "Thứ Sáu", start: "07:30", end: "22:30" },
-  { day: "Thứ Bảy", start: "07:30", end: "22:30" },
-  { day: "Chủ Nhật", start: "07:30", end: "22:30" },
-];
+const HOURS = { start: "07:30", end: "22:30" };
 
-const services = [
-  "Chỗ ngồi ngoài trời",
-  "Nhận hàng ngay bên ngoài",
-  "Đặt mua rồi tự đến lấy tại cửa hàng",
-];
+const toMinutes = (time: string) => {
+  const [h, m] = time.split(":").map(Number);
+  return h * 60 + m;
+};
 
-const features = ["Mức giá · $", "100% đề xuất (16 lượt đánh giá)"];
 const isOpenNow = () => {
   const now = new Date();
   const minutes = now.getHours() * 60 + now.getMinutes();
-  const [startH, startM] = weeklyHours[0].start.split(":").map(Number);
-  const [endH, endM] = weeklyHours[0].end.split(":").map(Number);
-  const start = startH * 60 + startM;
-  const end = endH * 60 + endM;
+  const start = toMinutes(HOURS.start);
+  const end = toMinutes(HOURS.end);
   return minutes >= start && minutes <= end;
 };
 
 export default function Footer() {
+  const t = useTranslations("footer");
   const [isOpen, setIsOpen] = useState(isOpenNow());
   const [showPopup, setShowPopup] = useState(false);
+
+  const weeklyHours: DayHours[] = useMemo(() => {
+    const days = (t.raw("weekdays") as string[]) || [];
+    return days.map((day) => ({ day, start: HOURS.start, end: HOURS.end }));
+  }, [t]);
+
+  const services = useMemo<string[]>(() => {
+    const items = t.raw("services") as string[] | undefined;
+    return items ?? [];
+  }, [t]);
+
+  const features = useMemo<string[]>(() => {
+    const items = t.raw("features") as string[] | undefined;
+    return items ?? [];
+  }, [t]);
 
   useEffect(() => {
     const id = setInterval(() => setIsOpen(isOpenNow()), 60_000);
@@ -54,8 +58,8 @@ export default function Footer() {
   }, []);
 
   const statusLabel = useMemo(
-    () => (isOpen ? "Đang mở cửa" : "Đang đóng cửa"),
-    [isOpen]
+    () => (isOpen ? t("statusOpen") : t("statusClosed")),
+    [isOpen, t]
   );
 
   return (
@@ -70,23 +74,21 @@ export default function Footer() {
             <div className="space-y-5">
               <div className="flex items-center gap-3">
                 <img
-                  src="/Logo/Logo.jpg"
+                  src="/Logo/Logo1.jpg"
                   alt="Drop In Cafe"
                   className="h-12 w-12 rounded-full border border-amber-200 object-cover shadow-sm"
                 />
                 <div>
                   <p className="text-base font-semibold text-slate-950">
-                    Drop In Cafe
+                    {t("brandName")}
                   </p>
-                  <p className="text-sm text-slate-600">
-                    Coffee & Chill in Old Quarter
-                  </p>
+                  <p className="text-sm text-slate-600">{t("brandTagline")}</p>
                 </div>
               </div>
               <div className="space-y-2 text-sm text-slate-700">
                 <p className="flex items-start gap-2">
                   <MapPin className="mt-0.5 h-5 w-5 text-amber-500" />
-                  <span>163 Phùng Hưng, Cửa Đông, Hoàn Kiếm, Hà Nội</span>
+                  <span>{t("address")}</span>
                 </p>
                 <p className="flex items-center gap-2">
                   <Phone className="h-5 w-5 text-green-500" />
@@ -151,7 +153,7 @@ export default function Footer() {
                     <XCircle className="h-6 w-6 text-amber-500" />
                   )}
                   <div>
-                    <p className="text-sm text-slate-500">Giờ hoạt động</p>
+                    <p className="text-sm text-slate-500">{t("hoursLabel")}</p>
                     <p className="text-base font-semibold text-slate-900">
                       {statusLabel}
                     </p>
@@ -160,9 +162,9 @@ export default function Footer() {
                 <button
                   type="button"
                   onClick={() => setShowPopup(true)}
-                  className="text-sm font-medium text-sky-700 underline underline-offset-4 hover:text-amber-600 cursor-pointer"
+                  className="cursor-pointer text-sm font-medium text-sky-700 underline underline-offset-4 transition hover:text-amber-600"
                 >
-                  Xem chi tiết
+                  {t("viewDetails")}
                 </button>
               </div>
 
@@ -171,22 +173,22 @@ export default function Footer() {
                   <Info className="mt-0.5 h-4 w-4 text-amber-500" />
                   <span>{statusLabel}</span>
                 </p>
-                {services.map((s) => (
+                {services.map((service) => (
                   <p
-                    key={s}
+                    key={service}
                     className="flex items-start gap-2 text-sm text-slate-700"
                   >
                     <CheckCircle2 className="mt-0.5 h-4 w-4 text-emerald-500" />
-                    <span>{s}</span>
+                    <span>{service}</span>
                   </p>
                 ))}
-                {features.map((f) => (
+                {features.map((feature) => (
                   <p
-                    key={f}
+                    key={feature}
                     className="flex items-start gap-2 text-sm text-slate-700"
                   >
                     <Info className="mt-0.5 h-4 w-4 text-slate-500" />
-                    <span>{f}</span>
+                    <span>{feature}</span>
                   </p>
                 ))}
               </div>
@@ -196,7 +198,7 @@ export default function Footer() {
               <div className="aspect-4/3 w-full overflow-hidden rounded-lg border border-amber-100">
                 <iframe
                   title="Drop In Cafe map"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3726.09016140042!2d105.841!3d21.033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDAyJzIxLjAiTiAxMDXCsDUwJzI3LjYiRQ!5e0!3m2!1sen!2s!4v1700000000000!5m2!1sen!2s"
+                  src="https://www.google.com/maps?q=163+Phung+Hung,+Cua+Dong,+Hoan+Kiem,+Ha+Noi&hl=vi&output=embed"
                   width="100%"
                   height="100%"
                   allowFullScreen
@@ -206,21 +208,19 @@ export default function Footer() {
                 />
               </div>
               <a
-                href="https://maps.app.goo.gl/m1dF4toG6xPYLGdQ9"
+                href="https://www.google.com/maps/search/?api=1&query=163+Phung+Hung,+Cua+Dong,+Hoan+Kiem,+Ha+Noi"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 inline-flex items-center gap-2 text-sm text-sky-700 hover:text-amber-600"
+                className="mt-3 inline-flex items-center gap-2 text-sm text-sky-700 transition hover:text-amber-600"
               >
-                Mở trong Google Maps
+                {t("mapCta")}
                 <ExternalLink className="h-4 w-4" />
               </a>
             </div>
           </div>
 
           <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-amber-100 pt-4 text-xs text-slate-600 md:flex-row">
-            <p>
-              © {new Date().getFullYear()} Drop In Cafe. All rights reserved.
-            </p>
+            <p>{t("legal", { year: new Date().getFullYear() })}</p>
           </div>
         </div>
       </footer>
@@ -230,7 +230,7 @@ export default function Footer() {
           <div className="w-full max-w-lg rounded-2xl border border-amber-100 bg-white p-6 text-slate-900 shadow-2xl">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm text-slate-500">Giờ hoạt động</p>
+                <p className="text-sm text-slate-500">{t("modal.title")}</p>
                 <p className="text-lg font-semibold text-slate-900">
                   {statusLabel}
                 </p>
@@ -238,35 +238,35 @@ export default function Footer() {
               <button
                 type="button"
                 onClick={() => setShowPopup(false)}
-                className="text-slate-500 hover:text-amber-600 cursor-pointer rounded-full p-2 transition"
-                aria-label="Đóng"
+                className="cursor-pointer rounded-full p-2 text-slate-500 transition hover:text-amber-600"
+                aria-label={t("modal.close")}
               >
                 ✕
               </button>
             </div>
             <div className="mt-4 space-y-2 text-sm text-slate-800">
-              {weeklyHours.map((d) => (
-                <div key={d.day} className="flex items-center justify-between">
-                  <span>{d.day}</span>
-                  <span className="tabular-nums">{`${d.start} - ${d.end}`}</span>
+              {weeklyHours.map((day) => (
+                <div
+                  key={day.day}
+                  className="flex items-center justify-between"
+                >
+                  <span>{day.day}</span>
+                  <span className="tabular-nums">{`${day.start} - ${day.end}`}</span>
                 </div>
               ))}
             </div>
-            {/* <p className="mt-4 text-xs text-slate-500">
-              Updated khoang 5 nam truoc
-            </p> */}
             <div className="mt-4 space-y-2">
               <p className="flex items-center gap-2 text-sm text-slate-900">
                 <Clock className="h-4 w-4 text-amber-500" />
-                Dich vu
+                {t("modal.servicesTitle")}
               </p>
-              {services.map((s) => (
+              {services.map((service) => (
                 <p
-                  key={s}
+                  key={service}
                   className="flex items-start gap-2 text-sm text-slate-800"
                 >
                   <CheckCircle2 className="mt-0.5 h-4 w-4 text-emerald-500" />
-                  <span>{s}</span>
+                  <span>{service}</span>
                 </p>
               ))}
             </div>
@@ -275,7 +275,7 @@ export default function Footer() {
               onClick={() => setShowPopup(false)}
               className="mt-6 w-full cursor-pointer rounded-lg bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-amber-300"
             >
-              Đóng
+              {t("modal.close")}
             </button>
           </div>
         </div>

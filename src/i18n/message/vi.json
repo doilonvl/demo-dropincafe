@@ -1,5 +1,105 @@
 {
   "home": {
-    "welcome": "Chào mừng bạn đến với ứng dụng của chúng tôi!"
+    "welcome": "Chào mừng bạn đến với ứng dụng của chúng tôi!",
+    "slider": {
+      "item1": {
+        "name": "Khoảnh khắc bên đường tàu",
+        "description": "Nhâm nhi cà phê cạnh đường tàu Hà Nội, nghe tiếng tàu lăn qua."
+      },
+      "item2": {
+        "name": "Buổi sáng nắng vàng",
+        "description": "Mở laptop, gọi một ly cà phê và bắt đầu ngày mới trong không gian tràn nắng."
+      },
+      "item3": {
+        "name": "Chiều chill cùng nhạc",
+        "description": "Âm nhạc nhẹ, ánh sáng ấm và espresso thơm dịu cho buổi chiều thư giãn."
+      },
+      "item4": {
+        "name": "Hân hoan cuối tuần",
+        "description": "Gác bên nhỏ, ánh đèn vàng và bánh ngọt cho một cuối tuần ấm áp."
+      }
+    },
+    "hero": {
+      "title": "Drop In Cafe",
+      "line1": "Cà phê phong vị Úc và Việt giữa phố cổ Hà Nội.",
+      "line2": "Egg coffee trứ danh, nên thử ít nhất một lần.",
+      "line3": "Ngay đối diện phố đường tàu lịch sử.",
+      "line4": "Đến và trải nghiệm một quán cà phê khác biệt.",
+      "line5": "Chỉ cần ghé vào."
+    },
+    "signature": {
+      "heading": "Signature Lineup",
+      "sub": "Những món đặc trưng tạo nên Drop In Cafe.",
+      "loading": "Đang tải Signature Lineup...",
+      "empty": "Hiện chưa có sản phẩm nào được đánh dấu Signature Lineup."
+    }
+  },
+  "header": {
+    "products": "Sản phẩm",
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
+    "menuTitle": "Menu quán",
+    "openMenu": "Mở menu",
+    "close": "Đóng"
+  },
+  "bestSellers": {
+    "eyebrow": "Best Sellers",
+    "title": "Những thức uống giữ chân khách quen",
+    "intro": "Chúng tôi muốn tạo ra một điểm dừng nhỏ, nơi bạn có thể ghé vào bất chợt để ngồi đủ lâu nhìn một chuyến tàu đi qua, trò chuyện với bạn đồng hành, hoặc hoàn thành nốt vài dòng công việc. Từng chi tiết – từ menu, ánh sáng đến chỗ ngồi sát đường ray – đều được thiết kế để giúp bạn cảm thấy được chào đón, kết nối hơn với thành phố này và với nhau.",
+    "loading": "Đang tải các món best-seller...",
+    "empty": "Hiện chưa có sản phẩm nào được đánh dấu best-seller.",
+    "signatureLabel": "Đồ uống signature",
+    "prev": "Trước",
+    "next": "Tiếp",
+    "goToSlide": "Tới slide {index}"
+  },
+  "homeStory": {
+    "stat1": "Công thức signature được tạo nên",
+    "stat2": "Ly đồ uống phục vụ bên đường tàu",
+    "stat3": "Điểm đánh giá trung bình từ khách",
+    "eyebrow": "Câu chuyện",
+    "title": "Nơi nhịp tàu gặp nhịp cà phê",
+    "body": "Drop In Cafe sinh ra bên phố đường tàu Hà Nội, nơi mỗi chuyến tàu lướt qua đều mang theo một câu chuyện mới. Mỗi ly egg coffee, flat white hay matcha lạnh đều được pha chậm, ưu tiên cân bằng giữa hương, vị và cảm giác bạn mang theo sau khi rời quán. Chúng tôi muốn tạo ra một điểm dừng nhỏ, nơi bạn có thể ghé vào bất chợt để ngồi đủ lâu nhìn một chuyến tàu đi qua, trò chuyện với bạn đồng hành, hoặc hoàn thành nốt vài dòng công việc. Từng chi tiết – từ menu, ánh sáng đến chỗ ngồi sát đường ray – đều được thiết kế để giúp bạn cảm thấy được chào đón, kết nối hơn với thành phố này và với nhau."
+  },
+  "footer": {
+    "brandName": "Drop In Cafe",
+    "brandTagline": "Cà phê & chill ở Phố Cổ",
+    "address": "163 Phùng Hưng, Cửa Đông, Hoàn Kiếm, Hà Nội",
+    "hoursLabel": "Giờ hoạt động",
+    "statusOpen": "Đang mở cửa",
+    "statusClosed": "Đang đóng cửa",
+    "viewDetails": "Xem chi tiết",
+    "servicesTitle": "Dịch vụ",
+    "services": [
+      "Chỗ ngồi ngoài trời",
+      "Nhận hàng ngay bên ngoài",
+      "Đặt trước rồi đến lấy tại quán"
+    ],
+    "features": [
+      "Mức giá: 40k - 100k",
+      "Quán địa phương 100% (16 lượt đánh giá)"
+    ],
+    "mapCta": "Xem trên Google Maps",
+    "modal": {
+      "title": "Giờ hoạt động",
+      "servicesTitle": "Dịch vụ",
+      "close": "Đóng"
+    },
+    "legal": "© {year} Drop In Cafe. Bảo lưu mọi quyền.",
+    "weekdays": [
+      "Thứ Hai",
+      "Thứ Ba",
+      "Thứ Tư",
+      "Thứ Năm",
+      "Thứ Sáu",
+      "Thứ Bảy",
+      "Chủ Nhật"
+    ]
+  },
+  "notFound": {
+    "title": "Không tìm thấy trang",
+    "description": "Đường dẫn bạn truy cập có thể đã bị xóa hoặc chưa tồn tại.",
+    "ctaHome": "Về trang chủ",
+    "hint": "Kiểm tra lại URL hoặc thử tìm kiếm nội dung khác."
   }
 }

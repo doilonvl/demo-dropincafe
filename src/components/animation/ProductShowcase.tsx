@@ -1,5 +1,7 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 "use client";
+import Image from "next/image";
 import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -37,11 +39,19 @@ export default function ProductShowcase({
 
   useGSAP(
     () => {
+      if (!sectionRef.current) return;
       gsap.registerPlugin(ScrollTrigger);
 
-      gsap.set(".work-item", { y: yOffset });
+      const section = sectionRef.current;
+      const rowsEls = section.querySelectorAll(".row");
+      const allCards = Array.from(
+        section.querySelectorAll<HTMLElement>(".work-item")
+      );
 
-      sectionRef.current?.querySelectorAll(".row").forEach((row) => {
+      // set initial y only inside this section to avoid scope issues
+      gsap.set(allCards, { y: yOffset });
+
+      rowsEls.forEach((row) => {
         const cards = row.querySelectorAll(".work-item");
 
         cards.forEach((card, idx) => {
@@ -55,6 +65,7 @@ export default function ProductShowcase({
         ScrollTrigger.create({
           trigger: row,
           start,
+          once: true,
           onEnter: () => {
             gsap.to(cards, {
               y: 0,
@@ -75,14 +86,31 @@ export default function ProductShowcase({
     <section className="work" ref={sectionRef}>
       {rows.map((pair, rowIdx) => (
         <div className="row" key={rowIdx}>
-          {pair.map((item) => (
+          {pair.map((item, idx) => (
             <a
-              className="work-item work-item-link"
-              href={item.route}
+              className={`work-item work-item-link ${
+                idx === 1 ? "hidden sm:block" : ""
+              }`}
+              href="/products"
               key={item.route}
             >
               <div className="work-item-img">
-                <img src={item.img} alt={item.name} />
+                <Image
+                  src={item.img}
+                  alt={item.name}
+                  fill
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  className="object-cover"
+                  loading="lazy"
+                  onError={(e) => {
+                    const target = e.currentTarget as HTMLImageElement & {
+                      dataset: { fallbackApplied?: string };
+                    };
+                    if (target.dataset?.fallbackApplied) return;
+                    target.src = "/Signature/1.jpg";
+                    target.dataset.fallbackApplied = "true";
+                  }}
+                />
               </div>
               <div className="work-item-copy">
                 <h3>{item.name}</h3>

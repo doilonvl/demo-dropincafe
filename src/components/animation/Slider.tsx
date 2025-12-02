@@ -22,7 +22,7 @@ type Props = {
 export default function ProductSlider({
   items,
   autoPlay = true,
-  autoPlayDelay = 3000,
+  autoPlayDelay = 4500,
   transitionDuration = 0.7,
 }: Props) {
   const trackRef = useRef<HTMLDivElement | null>(null);

@@ -1,5 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import React, { JSX, useEffect, useMemo, useRef, useState } from "react";
@@ -18,10 +18,13 @@ type TextOnScrollProps = {
 const countChars = (node: React.ReactNode): number => {
   if (typeof node === "string" || typeof node === "number")
     return String(node).length;
+
   if (Array.isArray(node))
     return node.reduce((sum, n) => sum + countChars(n), 0);
+
   if (React.isValidElement(node))
     return countChars((node as React.ReactElement<any>).props.children);
+
   return 0;
 };
 
@@ -66,73 +69,94 @@ export default function TextOnScroll({
     return () => window.removeEventListener("scroll", onScroll);
   }, [scrollDir]);
 
-  const content = useMemo(() => (text ? text : children), [text, children]);
-  const totalChars = useMemo(() => countChars(content), [content]);
+  const rawContent = useMemo<React.ReactNode>(() => {
+    return text ?? children;
+  }, [text, children]);
+
+  if (!rawContent) return null;
+
+  // Flatten children để tránh mất phần tử cuối
+  const flatNodes = useMemo(
+    () => React.Children.toArray(rawContent),
+    [rawContent]
+  );
+
+  const totalChars = useMemo(
+    () => flatNodes.reduce<number>((sum, node) => sum + countChars(node), 0),
+    [flatNodes]
+  );
 
   const baseColor = "rgba(226, 232, 240, 0.6)"; // slate-200 slightly muted
   const focusColor = "rgb(255, 255, 255)"; // bright for dark bg
 
   const Tag = as as React.ElementType;
 
-  if (!content) return null;
-
-  let runningIndex = 0;
   const shouldAnimate =
     mounted && isInView && !(respectReducedMotion && prefersReducedMotion);
+
+  let runningIndex = 0;
+
+  const renderNode = (
+    node: React.ReactNode,
+    nodeIdx: number
+  ): React.ReactNode => {
+    if (typeof node === "string" || typeof node === "number") {
+      const str = String(node);
+
+      return str.split("").map((char, charIdx) => {
+        const absoluteIdx = runningIndex++;
+        const order =
+          scrollDir === "down"
+            ? absoluteIdx
+            : Math.max(totalChars - 1 - absoluteIdx, 0);
+
+        return (
+          <motion.span
+            key={`${nodeIdx}-${charIdx}-${scrollDir}`}
+            // để inline mặc định, tránh dính chữ
+            initial={{ opacity: 0.55, y: 0, color: baseColor }}
+            animate={
+              shouldAnimate
+                ? {
+                    opacity: 1,
+                    y: 0,
+                    color: focusColor,
+                    transition: {
+                      delay: delay + order * stagger,
+                      duration: 0.25,
+                      ease: [0.25, 0.9, 0.3, 1],
+                    },
+                  }
+                : { opacity: 0.55, y: 0, color: baseColor }
+            }
+          >
+            {char}
+          </motion.span>
+        );
+      });
+    }
+
+    if (Array.isArray(node)) {
+      return node.map((child, idx) => renderNode(child, idx));
+    }
+
+    if (React.isValidElement(node)) {
+      const el = node as React.ReactElement<any>;
+      return React.cloneElement(el, {
+        key: el.key ?? `node-${nodeIdx}`,
+        children: renderNode(el.props.children, nodeIdx),
+      });
+    }
+
+    return null;
+  };
 
   return (
     <Tag
       ref={containerRef as any}
-      className={`mx-auto text-center text-lg leading-relaxed text-white sm:text-xl ${className}`}
+      className={`mx-auto text-center text-lg leading-relaxed text-white sm:text-xl whitespace-pre-wrap ${className}`}
     >
-      {(Array.isArray(content) ? content : [content]).map((node, nodeIdx) => {
-        const render = (n: React.ReactNode): React.ReactNode => {
-          if (typeof n === "string" || typeof n === "number") {
-            const str = String(n);
-            return str.split("").map((char) => {
-              const absoluteIdx = runningIndex++;
-              const order =
-                scrollDir === "down"
-                  ? absoluteIdx
-                  : Math.max(totalChars - 1 - absoluteIdx, 0);
-              return (
-                <motion.span
-                  key={`${absoluteIdx}-${scrollDir}`}
-                  className="inline-block"
-                  initial={{ opacity: 0.55, y: 0, color: baseColor }}
-                  animate={
-                    shouldAnimate
-                      ? {
-                          opacity: 1,
-                          y: 0,
-                          color: focusColor,
-                          transition: {
-                            delay: delay + order * stagger,
-                            duration: 0.25,
-                            ease: [0.25, 0.9, 0.3, 1],
-                          },
-                        }
-                      : { opacity: 0.55, y: 0, color: baseColor }
-                  }
-                >
-                  {char === " " ? "\u00A0" : char}
-                </motion.span>
-              );
-            });
-          }
-          if (Array.isArray(n)) return n.map(render);
-          if (React.isValidElement(n)) {
-            return React.cloneElement(n as React.ReactElement<any>, {
-              children: render((n as React.ReactElement<any>).props.children),
-              key:
-                (n as React.ReactElement<any>).key ??
-                `${nodeIdx}-${runningIndex}`,
-            });
-          }
-          return null;
-        };
-        return render(node);
-      })}
+      {flatNodes.map((node, idx) => renderNode(node, idx))}
     </Tag>
   );
 }

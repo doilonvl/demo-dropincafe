@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: { default: "Drop in cafe", template: "%s | Drop in cafe" },
   description:
     "A cafe where you can drop in anytime to relax and enjoy a cup of coffee.",
-  icons: { icon: [{ url: "/Logo/Logo.jpg", rel: "icon", type: "image/jpeg" }] },
+  icons: { icon: [{ url: "/Logo/Logo1.jpg", rel: "icon", type: "image/jpeg" }] },
 };
 
 export default async function RootLayout({
