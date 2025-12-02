@@ -38,14 +38,41 @@ export async function POST(req: Request) {
 
   // Lấy token từ payload để tự set cookie với domain hợp lệ (tránh domain sai từ upstream)
   const isProd = process.env.NODE_ENV === "production";
-  const access =
+  let access =
     (data as any)?.access_token ??
     (data as any)?.accessToken ??
     (data as any)?.token;
-  const refresh =
+  let refresh =
     (data as any)?.refresh_token ??
     (data as any)?.refreshToken ??
     (data as any)?.refresh;
+
+  // Fallback: nếu BE chỉ set cookie (không trả token trong body), lấy từ header Set-Cookie
+  if (!access || !refresh) {
+    const setCookies =
+      (upstream.headers as any).getSetCookie?.() ??
+      upstream.headers.get("set-cookie")?.split(/,(?=[^;]+=[^;]+;)/g) ??
+      [];
+    for (const cookie of setCookies) {
+      const match = cookie.match(/^(\w+)=([^;]+)/);
+      if (!match) continue;
+      const [, name, value] = match;
+      if (
+        !access &&
+        (name === "access_token" || name === "accessToken" || name === "token")
+      ) {
+        access = value;
+      }
+      if (
+        !refresh &&
+        (name === "refresh_token" ||
+          name === "refreshToken" ||
+          name === "refresh")
+      ) {
+        refresh = value;
+      }
+    }
+  }
 
   if (access) {
     res.cookies.set("access_token", access, {
