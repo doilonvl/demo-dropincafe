@@ -105,7 +105,7 @@ export default function HomePage() {
         <FadeIn direction="right">
           <div className="mx-auto flex w-full flex-col gap-10 lg:flex-row lg:items-center">
             {/* Left image */}
-            <div className="hidden w-full max-w-sm mx-auto overflow-hidden border border-white/20 shadow-2xl md:block lg:mx-0 lg:ml-auto">
+            <div className="hidden lg:block w-full max-w-sm mx-auto overflow-hidden border border-white/20 shadow-2xl lg:mx-0 lg:ml-auto">
               <div className="relative h-80 w-full sm:h-80 md:h-80 lg:h-[360px]">
                 <Image
                   src="/Logo/Logo5.jpg"
@@ -131,7 +131,7 @@ export default function HomePage() {
             </div>
 
             {/* Right image */}
-            <div className="hidden w-full max-w-sm mx-auto overflow-hidden border border-white/20 shadow-2xl md:block lg:mx-0 lg:ml-auto">
+            <div className="hidden lg:block w-full max-w-sm mx-auto overflow-hidden border border-white/20 shadow-2xl lg:mx-0 lg:ml-auto">
               <div className="relative h-80 w-full sm:h-80 md:h-80 lg:h-[360px]">
                 <Image
                   src="/Logo/Logo11.jpg"

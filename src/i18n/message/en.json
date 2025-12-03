@@ -45,7 +45,7 @@
   "bestSellers": {
     "eyebrow": "Best Sellers",
     "title": "Drinks that keep regulars coming back",
-    "intro": "We want a small stop where you can drop in, linger long enough to watch a train pass, chat with your companion, or finish a few lines of work. Every detail—from menu and lighting to the seats right by the tracks—is designed to help you feel welcomed and more connected to this city and to each other.",
+    "intro": "We want a small stop where you can drop in, linger long enough to watch a train pass, chat with your companion, or finish a few lines of work. Every detailâ€”from menu and lighting to the seats right by the tracksâ€”is designed to help you feel welcomed and more connected to this city and to each other.",
     "loading": "Loading best-seller items...",
     "empty": "No items are marked as best-sellers yet.",
     "signatureLabel": "Signature drink",
@@ -59,7 +59,7 @@
     "stat3": "Average guest rating",
     "eyebrow": "Our story",
     "title": "Where the train rhythm meets coffee",
-    "body": "Drop In Cafe was born beside Hanoi Train Street, where every passing carriage carries a new story. Each egg coffee, flat white, or iced matcha is made deliberately, balancing aroma, flavor, and the feeling you take with you after leaving. We built a small stop where you can drop in, linger long enough to watch a train roll by, talk with your companion, or finish a few lines of work. Every detail—from the menu and lighting to the seats by the tracks—is designed to make you feel welcomed and more connected to this city and to each other."
+    "body": "Drop In Cafe was born beside Hanoi Train Street, where every passing carriage carries a new story. Each egg coffee, flat white, or iced matcha is made deliberately, balancing aroma, flavor, and the feeling you take with you after leaving. We built a small stop where you can drop in, linger long enough to watch a train roll by, talk with your companion, or finish a few lines of work. Every detailâ€”from the menu and lighting to the seats by the tracksâ€”is designed to make you feel welcomed and more connected to this city and to each other."
   },
   "footer": {
     "brandName": "Drop In Cafe",
@@ -75,14 +75,17 @@
       "Walk-up counter",
       "Order ahead for pickup"
     ],
-    "features": ["Price range: 40k - 100k VND", "100% local spot (16 ratings)"],
+    "features": [
+      "Price range: 40k - 100k VND",
+      "100% local spot (16 ratings)"
+    ],
     "mapCta": "View on Google Maps",
     "modal": {
       "title": "Hours",
       "servicesTitle": "Services",
       "close": "Close"
     },
-    "legal": "© {year} Drop In Cafe. All rights reserved.",
+    "legal": "Â© {year} Drop In Cafe. All rights reserved.",
     "weekdays": [
       "Monday",
       "Tuesday",
@@ -91,12 +94,174 @@
       "Friday",
       "Saturday",
       "Sunday"
-    ]
+    ],
+    "privacyPolicy": "Privacy Policy"
   },
   "notFound": {
     "title": "Page not found",
     "description": "The link you followed may be broken or the page may have been removed.",
     "ctaHome": "Back to home",
     "hint": "Check the URL or try searching for something else."
+  },
+  "privacy": {
+    "metaTitle": "Privacy Policy | Drop In Cafe",
+    "metaDescription": "Learn how Drop In Cafe collects, uses, and protects your data when you visit dropincafe.com.vn or contact us.",
+    "title": "Privacy Policy",
+    "tagline": "We protect your information when you browse dropincafe.com.vn or reach out for drink orders, quotes, or event support.",
+    "updated": "Last updated: Dec 2, 2025",
+    "heroHighlights": [
+      "No data selling",
+      "Clear purpose",
+      "Your control",
+      "Security first"
+    ],
+    "sectionEyebrow": "Privacy at Drop In Cafe",
+    "quickPoints": [
+      {
+        "title": "Clear purpose",
+        "description": "We only collect what we need to respond to you, send quotes, process orders, and improve your experience.",
+        "icon": "ShieldCheck"
+      },
+      {
+        "title": "No selling data",
+        "description": "We never sell personal data. Sharing, when needed, is limited to vetted providers that help us operate.",
+        "icon": "FileSearch"
+      },
+      {
+        "title": "Your control",
+        "description": "You may request access, corrections, deletion, or withdraw consent at any time.",
+        "icon": "UserCheck"
+      },
+      {
+        "title": "Layered security",
+        "description": "Restricted internal access plus technical and organizational safeguards to reduce risk.",
+        "icon": "LockKeyhole"
+      }
+    ],
+    "sections": [
+      {
+        "id": "scope",
+        "title": "1. Scope & applicability",
+        "summary": "This policy covers information we collect whenever you interact with Drop In Cafe.",
+        "items": [
+          "Applies when you visit dropincafe.com.vn, submit contact forms, call, email, message us on social channels, or speak with us at the cafe.",
+          "By using the site or sharing information, you agree to the terms in this policy."
+        ],
+        "icon": "Globe2"
+      },
+      {
+        "id": "data",
+        "title": "2. Information we collect",
+        "items": [
+          "Information you provide: name, email, phone number, inquiry details, order/service information, feedback, or reviews.",
+          "Technical data collected automatically: IP address, browser, device, operating system, entry/exit pages, time on page, and basic interactions.",
+          "Cookies and similar technologies to remember preferences and measure site performance."
+        ],
+        "icon": "Sparkles"
+      },
+      {
+        "id": "use",
+        "title": "3. How we use your information",
+        "items": [
+          "Respond to inquiries, send quotes, and confirm or follow up on drink orders or services.",
+          "Improve content speed, reliability, and experience on dropincafe.com.vn.",
+          "Send important updates (for example: opening hours changes, menu updates, or order follow-ups).",
+          "Detect and prevent fraud or misuse of our systems."
+        ],
+        "icon": "Bell"
+      },
+      {
+        "id": "cookies",
+        "title": "4. Cookies & tracking",
+        "items": [
+          "We use cookies to remember preferences, measure engagement, and optimize site performance.",
+          "You can disable cookies in your browser. Some features may be limited when cookies are turned off."
+        ],
+        "icon": "Cookie"
+      },
+      {
+        "id": "sharing",
+        "title": "5. Sharing your information",
+        "items": [
+          "We do not sell personal data to third parties.",
+          "We may share data with service providers (hosting, analytics, payment, marketing tools) to run and improve the site.",
+          "We may share with partners or contractors related to your order/service when necessary, under confidentiality obligations.",
+          "We comply with lawful requests from authorities when required."
+        ],
+        "icon": "FileSearch"
+      },
+      {
+        "id": "security",
+        "title": "6. Data security",
+        "items": [
+          "We apply technical and organizational measures to prevent unauthorized access, alteration, or disclosure.",
+          "Internal access to personal data is limited based on role and business need.",
+          "While we strive for security, no method of transmission or storage is absolutely secure."
+        ],
+        "icon": "Shield"
+      },
+      {
+        "id": "retention",
+        "title": "7. Data retention",
+        "items": [
+          "We keep data only as long as needed to fulfill the purposes for which it was collected.",
+          "We delete or anonymize data upon request unless a longer retention period is required by law."
+        ],
+        "icon": "CheckCircle2"
+      },
+      {
+        "id": "rights",
+        "title": "8. Your rights",
+        "items": [
+          "Request access to, correction of, or deletion of your personal data.",
+          "Withdraw consent or object to certain processing activities.",
+          "Submit a request via the contact details below; we respond within a reasonable time."
+        ],
+        "icon": "UserCheck"
+      },
+      {
+        "id": "links",
+        "title": "9. Third-party links",
+        "items": [
+          "Our site may link to external websites or services.",
+          "We are not responsible for their content or privacy practices. Please review their policies separately."
+        ],
+        "icon": "Globe2"
+      },
+      {
+        "id": "children",
+        "title": "10. Children?s privacy",
+        "items": [
+          "Our site is not intended for children under 13, and we do not knowingly collect data from them.",
+          "If you believe we hold data about a child, please contact us so we can remove it promptly."
+        ],
+        "icon": "ShieldCheck"
+      },
+      {
+        "id": "changes",
+        "title": "11. Changes to this policy",
+        "items": [
+          "We may update this policy and will post the latest version on this page.",
+          "We encourage you to review it periodically. Last updated: Dec 2, 2025."
+        ],
+        "icon": "Bell"
+      }
+    ],
+    "contact": {
+      "eyebrow": "Need help?",
+      "title": "Talk to Drop In Cafe",
+      "description": "If you have questions or want to exercise your privacy rights, please reach us via:",
+      "address": "163 Phung Hung, Cua Dong, Hoan Kiem, Ha Noi",
+      "phone": "+84 961 689 163",
+      "email": "info@dropincafe.com.vn"
+    },
+    "rightsTitle": "Exercising your rights",
+    "rightsCopy": "We respond within a reasonable timeframe (typically within 1?2 business days) and may verify your identity to protect your data.",
+    "rightsBullets": [
+      "Request a copy of the personal data you shared with us.",
+      "Ask for corrections to inaccurate or incomplete information.",
+      "Request deletion unless we must retain it to meet legal obligations.",
+      "Withdraw consent for non-essential emails or messages."
+    ]
   }
 }

@@ -13,7 +13,8 @@ import {
   XCircle,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 
 type DayHours = { day: string; start: string; end: string };
 
@@ -34,6 +35,7 @@ const isOpenNow = () => {
 
 export default function Footer() {
   const t = useTranslations("footer");
+  const locale = useLocale();
   const [isOpen, setIsOpen] = useState(isOpenNow());
   const [showPopup, setShowPopup] = useState(false);
 
@@ -221,6 +223,12 @@ export default function Footer() {
 
           <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-amber-100 pt-4 text-xs text-slate-600 md:flex-row">
             <p>{t("legal", { year: new Date().getFullYear() })}</p>
+            <Link
+              href={`/${locale}/privacy-policy`}
+              className="font-semibold text-slate-700 underline decoration-amber-400 decoration-2 underline-offset-4 transition hover:text-amber-600"
+            >
+              {t("privacyPolicy")}
+            </Link>
           </div>
         </div>
       </footer>
