@@ -203,6 +203,7 @@ export function createStackSlider(
   }
 
   function onWheel(e: WheelEvent) {
+    e.stopPropagation();
     e.preventDefault();
     if (isAnimating) return;
     wheelAccumulator += Math.abs(e.deltaY);
