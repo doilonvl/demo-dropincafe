@@ -14,6 +14,7 @@ import FadeIn from "@/components/animation/FadeIn";
 import { useSignatureLineupShowcase } from "@/features/products/useSignatureLineupShowcase";
 import { useLocale, useTranslations } from "next-intl";
 import type { Locale } from "@/types/content";
+import ScrollStrokePage from "@/components/animation/ScrollStrokePage";
 
 export default function HomePage() {
   const locale = useLocale() as Locale;
@@ -185,6 +186,11 @@ export default function HomePage() {
             start="top 65%"
           />
         )}
+      </section>
+
+      {/* Stroke SVG */}
+      <section>
+        <ScrollStrokePage />
       </section>
     </main>
   );

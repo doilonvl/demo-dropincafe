@@ -32,6 +32,16 @@
       "sub": "Handcrafted drinks highlighting the best of Drop In Cafe.",
       "loading": "Loading Signature Lineup...",
       "empty": "No drinks are marked as Signature Lineup yet."
+    },
+    "scrollStroke": {
+      "card1Title": "Order ahead, pick up on time",
+      "card1Body": "DropInCafe batches online orders, times the barista queue, and keeps pickup smooth beside the Train Street so your latte is ready as you arrive; no guessing, just scan and go.",
+      "card2Title": "Busy shift, steady with a DropInCafe tea",
+      "card2Body": "Even when the pickup line buzzes, one DropInCafe tea keeps the barista flow balanced; guests still see clear steps so they know exactly when to walk to the counter by the tracks.",
+      "img1Alt": "DropInCafe counter with a guest placing an online order",
+      "img2Alt": "Dashboard grouping DropInCafe pickup orders",
+      "img3Alt": "Barista workflow following the DropInCafe pickup queue by Train Street",
+      "img4Alt": "Customer receiving a coffee at the DropInCafe pickup counter"
     }
   },
   "header": {

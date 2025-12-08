@@ -353,3 +353,24 @@
     height: clamp(320px, 58vh, 520px);
   }
 }
+
+@media (max-width: 768px) {
+  .work-item {
+    padding: 10px;
+  }
+
+  .work-item-img {
+    height: auto;
+    aspect-ratio: 4 / 5; /* hoặc 1:1 tùy ảnh */
+  }
+
+  .work-item-img img {
+    object-fit: contain; /* giữ nguyên ảnh, không cắt */
+  }
+
+  .work-item-copy {
+    position: static;
+    opacity: 1;
+    transform: none; /* nếu trước đó dùng translate/opacity cho hover */
+  }
+}
