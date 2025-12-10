@@ -121,8 +121,8 @@ export default function HomePage() {
 
             {/* Center text */}
             <div className="relative w-full lg:w-1/2">
-              <TextOnScroll className="text-xl sm:text-2xl text-white">
-                <h2 className="text-3xl font-bold mb-2 text-white">
+              <TextOnScroll className="text-lg sm:text-xl md:text-2xl text-white leading-snug text-balance">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 text-white text-balance">
                   {hero.title}
                 </h2>
                 {hero.lines.map((line) => (
@@ -158,6 +158,11 @@ export default function HomePage() {
         <HomeStoryAndStats />
       </FadeIn>
 
+      {/* Stroke SVG */}
+      <section>
+        <ScrollStrokePage />
+      </section>
+
       {/* Signature line */}
       <section id="product-showcase" className="mx-auto mt-12 max-w-6xl px-4">
         <div className="text-center">
@@ -186,11 +191,6 @@ export default function HomePage() {
             start="top 65%"
           />
         )}
-      </section>
-
-      {/* Stroke SVG */}
-      <section>
-        <ScrollStrokePage />
       </section>
     </main>
   );

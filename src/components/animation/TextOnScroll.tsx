@@ -154,7 +154,7 @@ export default function TextOnScroll({
   return (
     <Tag
       ref={containerRef as any}
-      className={`mx-auto text-center text-lg leading-relaxed text-white sm:text-xl whitespace-pre-wrap ${className}`}
+      className={`mx-auto text-center text-base sm:text-lg md:text-xl leading-relaxed text-white whitespace-pre-wrap text-balance max-w-[min(92vw,720px)] ${className}`}
     >
       {flatNodes.map((node, idx) => renderNode(node, idx))}
     </Tag>

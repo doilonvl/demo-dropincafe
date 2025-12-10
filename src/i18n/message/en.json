@@ -55,7 +55,7 @@
   "bestSellers": {
     "eyebrow": "Best Sellers",
     "title": "Drinks that keep regulars coming back",
-    "intro": "We want a small stop where you can drop in, linger long enough to watch a train pass, chat with your companion, or finish a few lines of work. Every detailâ€”from menu and lighting to the seats right by the tracksâ€”is designed to help you feel welcomed and more connected to this city and to each other.",
+    "intro": "We want a small stop where you can drop in, linger long enough to watch a train pass, chat with your companion, or finish a few lines of work. Every detail from menu and lighting to the seats right by the tracks is designed to help you feel welcomed and more connected to this city and to each other.",
     "loading": "Loading best-seller items...",
     "empty": "No items are marked as best-sellers yet.",
     "signatureLabel": "Signature drink",
@@ -69,7 +69,7 @@
     "stat3": "Average guest rating",
     "eyebrow": "Our story",
     "title": "Where the train rhythm meets coffee",
-    "body": "Drop In Cafe was born beside Hanoi Train Street, where every passing carriage carries a new story. Each egg coffee, flat white, or iced matcha is made deliberately, balancing aroma, flavor, and the feeling you take with you after leaving. We built a small stop where you can drop in, linger long enough to watch a train roll by, talk with your companion, or finish a few lines of work. Every detailâ€”from the menu and lighting to the seats by the tracksâ€”is designed to make you feel welcomed and more connected to this city and to each other."
+    "body": "Drop In Cafe was born beside Hanoi Train Street, where every passing carriage carries a new story. Each egg coffee, flat white, or iced matcha is made deliberately, balancing aroma, flavor, and the feeling you take with you after leaving. We built a small stop where you can drop in, linger long enough to watch a train roll by, talk with your companion, or finish a few lines of work. Every detail from the menu and lighting to the seats by the tracks is designed to make you feel welcomed and more connected to this city and to each other."
   },
   "footer": {
     "brandName": "Drop In Cafe",
@@ -85,10 +85,7 @@
       "Walk-up counter",
       "Order ahead for pickup"
     ],
-    "features": [
-      "Price range: 40k - 100k VND",
-      "100% local spot (16 ratings)"
-    ],
+    "features": ["Price range: 40k - 100k VND", "100% local spot (16 ratings)"],
     "mapCta": "View on Google Maps",
     "modal": {
       "title": "Hours",

@@ -109,7 +109,7 @@ export default function ProductShowcase({
                       dataset: { fallbackApplied?: string };
                     };
                     if (target.dataset?.fallbackApplied) return;
-                    target.src = "/Signature/1.jpg";
+                    target.src = "/Product/product1.jpg";
                     target.dataset.fallbackApplied = "true";
                   }}
                 />

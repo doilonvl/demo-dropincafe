@@ -43,6 +43,10 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+.text-balance {
+  text-wrap: balance;
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -152,7 +156,8 @@
 .work-item-img {
   position: relative;
   width: 100%;
-  height: clamp(320px, 50vh, 600px);
+  aspect-ratio: 4 / 3;
+  height: auto;
   overflow: hidden;
 }
 .work-item-img img {
@@ -163,6 +168,42 @@
 
 .work-item-copy {
   padding-top: 12px;
+}
+
+/* Mobile tweaks for signature lineup */
+@media (max-width: 768px) {
+  .work {
+    justify-items: center;
+  }
+
+  .row {
+    justify-items: center;
+  }
+
+  .work-item {
+    width: min(90vw, 380px);
+    margin-inline: auto;
+    padding: 10px;
+  }
+
+  .work-item-img {
+    height: clamp(160px, 32vh, 220px);
+    aspect-ratio: 4 / 3;
+  }
+
+  .work-item-img img {
+    object-fit: cover;
+  }
+}
+
+@media (max-width: 480px) {
+  .work-item {
+    width: min(94vw, 340px);
+  }
+
+  .work-item-img {
+    height: clamp(160px, 32vh, 220px);
+  }
 }
 
 /* Home Story Stats Styles  */
@@ -221,8 +262,8 @@
 
 .stack-slider-stage {
   position: relative;
-  height: min(86vh, 900px);
-  min-height: 480px;
+  height: min(80vh, 820px);
+  min-height: 420px;
   overflow: visible;
   overscroll-behavior: contain;
   isolation: isolate;
@@ -251,8 +292,9 @@
   top: 45%;
   left: 50%;
   transform: translate3d(-50%, -50%, 0);
-  width: min(72vw, 920px);
-  height: clamp(360px, 68vh, 640px);
+  width: min(68vw, 880px);
+  aspect-ratio: 3 / 4;
+  height: clamp(360px, 64vh, 640px);
   border-radius: 0.25rem;
   display: flex;
   align-items: center;
@@ -304,8 +346,8 @@
 
 @media (max-width: 1024px) {
   .stack-slider-stage {
-    height: 82vh;
-    min-height: 420px;
+    height: 74vh;
+    min-height: 360px;
   }
 }
 
@@ -351,7 +393,26 @@
 
   .stack-slide {
     width: 82%;
-    height: clamp(320px, 58vh, 520px);
+    aspect-ratio: 4 / 3;
+    height: clamp(260px, 60vh, 420px);
+    top: 50%;
+  }
+}
+
+@media (max-width: 480px) {
+  .stack-slider-stage {
+    height: 68vh;
+    min-height: 300px;
+  }
+
+  .stack-slide {
+    width: 86%;
+    height: clamp(260px, 56vh, 420px);
+    top: 50%;
+  }
+
+  .stack-slide-title {
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
   }
 }
 
@@ -362,7 +423,7 @@
 
   .work-item-img {
     height: auto;
-    aspect-ratio: 4 / 5; /* hoặc 1:1 tùy ảnh */
+    aspect-ratio: 4 / 3; /* hoặc 1:1 tùy ảnh */
   }
 
   .work-item-img img {
@@ -373,5 +434,32 @@
     position: static;
     opacity: 1;
     transform: none; /* nếu trước đó dùng translate/opacity cho hover */
+  }
+}
+
+/* Overrides for signature showcase sizing on small screens */
+/* (removed overrides; signature sizing uses defaults above) */
+/* Signature lineup mobile override (takes precedence) */
+@media (max-width: 768px) {
+  .work-item {
+    width: min(88vw, 360px);
+    padding: 10px;
+    margin-inline: auto;
+  }
+  .work-item-img {
+    height: clamp(150px, 32vh, 210px);
+    aspect-ratio: 4 / 3;
+  }
+  .work-item-img img {
+    object-fit: cover;
+  }
+}
+
+@media (max-width: 480px) {
+  .work-item {
+    width: min(90vw, 320px);
+  }
+  .work-item-img {
+    height: clamp(140px, 30vh, 190px);
   }
 }

@@ -12,6 +12,7 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
+  SheetDescription,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
@@ -159,6 +160,9 @@ export default function Header() {
                 <SheetTitle className="mt-1 text-xl font-semibold text-white">
                   {t("menuTitle")}
                 </SheetTitle>
+                <SheetDescription className="sr-only">
+                  Mobile navigation menu for Drop In Cafe.
+                </SheetDescription>
               </SheetHeader>
 
               <nav className="space-y-2">

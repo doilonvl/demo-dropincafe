@@ -81,7 +81,8 @@ export function useSignatureLineupShowcase(locale: Locale, limit = 6) {
   const { data, isLoading, isError } = useGetProductsQuery({
     locale,
     isSignatureLineup: true,
-    limit,
+    limit: Math.min(limit, 12),
+    withCount: false,
   });
 
   const items = useMemo<ShowcaseItem[]>(() => {

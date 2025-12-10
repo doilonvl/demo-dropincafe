@@ -178,6 +178,7 @@ export const api = createApi({
         q?: string;
         isBestSeller?: boolean;
         isSignatureLineup?: boolean;
+        withCount?: boolean;
       }
     >({
       query: ({ locale, ...params }) => ({

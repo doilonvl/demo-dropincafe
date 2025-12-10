@@ -163,9 +163,10 @@ export default function ProductsPage() {
   const { data, isLoading, isError, error, isFetching } = useGetProductsQuery(
     {
       locale,
-      limit: 100,
+      limit: 40,
+      withCount: false,
     },
-    { refetchOnMountOrArgChange: true }
+    { refetchOnMountOrArgChange: false }
   );
 
   const {
@@ -366,7 +367,7 @@ export default function ProductsPage() {
               {filteredProducts.length === 0 ? (
                 <p className="text-sm text-neutral-500">{copy.emptyCategory}</p>
               ) : (
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:gap-3 lg:grid-cols-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-3 md:gap-4 lg:grid-cols-4">
                   {visibleProducts.map((product) => (
                     <ProductCard
                       key={product.id}
@@ -472,8 +473,8 @@ function ProductCard({
     !errored && product.image ? product.image : "/Product/product1.jpg";
 
   return (
-    <article className="group relative overflow-hidden bg-white shadow-sm ring-1 ring-neutral-100 transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl">
-      <div className="relative h-56 md:h-60 lg:h-64 cursor-pointer">
+    <article className="group relative overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-neutral-100 transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl">
+      <div className="relative w-full cursor-pointer h-72 sm:h-72 md:h-60 lg:h-64 overflow-hidden rounded-xl">
         {/* Ảnh sản phẩm */}
         <Image
           src={imgSrc}
