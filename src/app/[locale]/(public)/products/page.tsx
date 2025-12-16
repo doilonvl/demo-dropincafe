@@ -150,6 +150,41 @@ export default function ProductsPage() {
   const router = useRouter();
   const pathname = usePathname();
   const copy = COPY[locale] ?? COPY.vi;
+  const baseUrl =
+    (process.env.NEXT_PUBLIC_APP_URL || "https://dropincafe.com.vn").replace(
+      /\/$/,
+      ""
+    );
+  const localePath = locale === "en" ? "en" : "vi";
+  const pageUrl = `${baseUrl}/${localePath}/products`;
+  const productSeoJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        name: copy.bannerTitle,
+        url: pageUrl,
+        inLanguage: localePath,
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Drop In Cafe",
+            item: `${baseUrl}/${localePath}`,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: copy.sectionTitle,
+            item: pageUrl,
+          },
+        ],
+      },
+    ],
+  };
   const gridRef = useRef<HTMLDivElement | null>(null);
 
   const initialSlugFilter =
@@ -301,6 +336,10 @@ export default function ProductsPage() {
   return (
     <section>
       <main className="mx-auto max-w-6xl px-4 pt-24 pb-16 md:px-6 lg:px-8">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productSeoJsonLd) }}
+        />
         {/* Banner */}
         <div className="relative h-56 w-full overflow-hidden rounded-3xl bg-neutral-900/80 shadow-xl md:h-72 lg:h-80">
           <Image

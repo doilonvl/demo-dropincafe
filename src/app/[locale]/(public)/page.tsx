@@ -19,6 +19,27 @@ import ScrollStrokePage from "@/components/animation/ScrollStrokePage";
 export default function HomePage() {
   const locale = useLocale() as Locale;
   const t = useTranslations("home");
+  const baseUrl = (
+    process.env.NEXT_PUBLIC_APP_URL || "https://dropincafe.com.vn"
+  ).replace(/\/$/, "");
+  const localePath = locale === "en" ? "en" : "vi";
+  const pageUrl = `${baseUrl}/${localePath}`;
+  const homeJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CafeOrCoffeeShop",
+    name: "Drop In Cafe",
+    url: pageUrl,
+    image: `${baseUrl}/Logo/Logo1.jpg`,
+    address: {
+      addressLocality: "Hanoi",
+      addressCountry: "VN",
+    },
+    servesCuisine: ["Coffee", "Tea"],
+    sameAs: [
+      "https://www.facebook.com/dropincafe",
+      "https://www.instagram.com/dropincafe",
+    ],
+  };
 
   const sliderItems = [
     {
@@ -82,6 +103,10 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
+      />
       {/* Stack slider */}
       {stackSliderSlides.length > 0 && (
         <section className="stack-slider-section py-12 text-stone-900 relative">

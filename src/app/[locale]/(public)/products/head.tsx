@@ -1,6 +1,6 @@
-const BASE_URL =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
-  "https://dropincafe.vercel.app";
+const BASE_URL = (
+  process.env.NEXT_PUBLIC_APP_URL || "https://dropincafe.vercel.app"
+).replace(/\/$/, "");
 
 const META = {
   vi: {
@@ -15,11 +15,21 @@ const META = {
   },
 };
 
+function getLocaleOrDefault(locale: string | undefined) {
+  return locale === "en" ? "en" : "vi";
+}
+
 export default function Head({ params }: { params: { locale: string } }) {
-  const lang = params?.locale === "en" ? "en" : "vi";
+  const lang = getLocaleOrDefault(params?.locale);
   const { title, description } = META[lang];
   const url = `${BASE_URL}/${lang}/products`;
   const ogImage = `${BASE_URL}/Logo/Logo1.jpg`;
+
+  const alternates = [
+    { href: `${BASE_URL}/vi/products`, hrefLang: "vi" },
+    { href: `${BASE_URL}/en/products`, hrefLang: "en" },
+    { href: url, hrefLang: "x-default" },
+  ];
 
   return (
     <>
@@ -27,8 +37,17 @@ export default function Head({ params }: { params: { locale: string } }) {
       <meta name="description" content={description} />
       <meta name="robots" content="index,follow" />
       <link rel="canonical" href={url} />
+      {alternates.map((alt) => (
+        <link
+          key={alt.hrefLang}
+          rel="alternate"
+          hrefLang={alt.hrefLang}
+          href={alt.href}
+        />
+      ))}
 
       <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Drop In Cafe" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
@@ -39,6 +58,7 @@ export default function Head({ params }: { params: { locale: string } }) {
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
+      <meta name="twitter:site" content="@dropincafe" />
     </>
   );
 }
