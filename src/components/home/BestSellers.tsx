@@ -180,16 +180,32 @@ function ProgressBar({ label, value, active }: Stat & { active: boolean }) {
   );
 }
 
-export default function BestSellersCarousel() {
+type BestSellersProps = {
+  items?: ApiProduct[];
+};
+
+export default function BestSellersCarousel({ items }: BestSellersProps) {
   const locale = useLocale() as Locale;
   const t = useTranslations("bestSellers");
 
-  const { data, isLoading, isError } = useGetBestSellersQuery({
-    locale,
-    limit: 4,
-  });
+  const { data, isLoading, isError } = useGetBestSellersQuery(
+    {
+      locale,
+      limit: 4,
+    },
+    {
+      // If server already provided items, skip client fetch
+      skip: !!items,
+    }
+  );
 
   const bestSellers: BestSeller[] = useMemo(() => {
+    if (items) {
+      return items.length > 0
+        ? items.map(mapApiProductToBestSeller)
+        : FALLBACK_BEST_SELLERS;
+    }
+
     if (data?.items && data.items.length > 0) {
       return data.items.map(mapApiProductToBestSeller);
     }
@@ -199,8 +215,10 @@ export default function BestSellersCarousel() {
     }
 
     return [];
-  }, [data, isError]);
+  }, [items, data, isError]);
 
+  const loading = items ? false : isLoading;
+  const error = items ? false : isError;
   const total = bestSellers.length;
 
   const slides = useMemo(
@@ -355,11 +373,11 @@ export default function BestSellersCarousel() {
           </div>
         </FadeIn>
 
-        {isLoading && total === 0 && (
+        {loading && total === 0 && (
           <p className="mt-10 text-sm text-stone-500">{t("loading")}</p>
         )}
 
-        {!isLoading && total === 0 && !isError && (
+        {!loading && total === 0 && !error && (
           <p className="mt-10 text-sm text-stone-500">{t("empty")}</p>
         )}
 

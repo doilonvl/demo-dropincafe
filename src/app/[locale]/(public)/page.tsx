@@ -1,29 +1,108 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
-"use client";
 
 import Image from "next/image";
-import { useMemo } from "react";
+import { getLocale, getTranslations } from "next-intl/server";
+import type { Locale, Product } from "@/types/content";
 import ProductShowcase from "@/components/animation/ProductShowcase";
-import ProductSlider from "@/components/animation/Slider";
 import TextOnScroll from "@/components/animation/TextOnScroll";
 import BestSellersSection from "@/components/home/BestSellers";
 import HomeStoryAndStats from "@/components/home/HomeStory";
 import { StackSlider } from "@/components/animation/StackSlider";
 import FadeIn from "@/components/animation/FadeIn";
-import { useSignatureLineupShowcase } from "@/features/products/useSignatureLineupShowcase";
-import { useLocale, useTranslations } from "next-intl";
-import type { Locale } from "@/types/content";
 import ScrollStrokePage from "@/components/animation/ScrollStrokePage";
+import {
+  fetchBestSellers,
+  fetchSignatureLineup,
+  HOME_REVALIDATE_SECONDS,
+} from "./_data/home";
 
-export default function HomePage() {
-  const locale = useLocale() as Locale;
-  const t = useTranslations("home");
+export const revalidate = HOME_REVALIDATE_SECONDS;
+
+type ShowcaseItem = {
+  id: string;
+  name: string;
+  description: string;
+  img: string;
+  route: string;
+};
+
+const FALLBACK_SIGNATURE_ITEMS: ShowcaseItem[] = [
+  {
+    id: "fallback-1",
+    name: "Signature Blend",
+    description: "Bold aroma from beans roasted fresh each day.",
+    img: "/Signature/1.jpg",
+    route: "/products/signature-blend",
+  },
+  {
+    id: "fallback-2",
+    name: "Cold Brew Citrus",
+    description: "Deep-cold brew with a light citrus twist.",
+    img: "/Signature/2.jpg",
+    route: "/products/cold-brew-citrus",
+  },
+  {
+    id: "fallback-3",
+    name: "Classic Latte",
+    description: "Steamed milk and gentle foam for slow mornings.",
+    img: "/Signature/3.jpg",
+    route: "/products/classic-latte",
+  },
+  {
+    id: "fallback-4",
+    name: "Matcha Fusion",
+    description: "Creamy matcha layered with robust espresso.",
+    img: "/Signature/4.jpg",
+    route: "/products/matcha-fusion",
+  },
+  {
+    id: "fallback-5",
+    name: "Hazelnut Cappuccino",
+    description: "Toasted hazelnut notes with silky foam.",
+    img: "/Signature/5.jpg",
+    route: "/products/hazelnut-cappuccino",
+  },
+  {
+    id: "fallback-6",
+    name: "Vietnamese Phin",
+    description: "Traditional phin brew with a chocolaty finish.",
+    img: "/Signature/6.jpg",
+    route: "/products/vietnamese-phin",
+  },
+];
+
+function mapProductsToShowcaseItems(products: Product[]): ShowcaseItem[] {
+  const fallbackImg = "/Signature/1.jpg";
+
+  return (products || []).map((p) => {
+    const url = p.image?.url || "";
+    const safeImg =
+      url && !url.includes("/demo/") && !url.includes("res.cloudinary.com/demo")
+        ? url
+        : fallbackImg;
+
+    return {
+      id: p._id,
+      name: p.name,
+      description: p.shortDescription || p.description || "",
+      img: safeImg,
+      route: p.slug
+        ? `/products?slug=${encodeURIComponent(p.slug)}`
+        : "/products",
+    };
+  });
+}
+
+export default async function HomePage() {
+  const locale = (await getLocale()) as Locale;
+  const t = await getTranslations("home");
+
   const baseUrl = (
     process.env.NEXT_PUBLIC_APP_URL || "https://dropincafe.com.vn"
   ).replace(/\/$/, "");
   const localePath = locale === "en" ? "en" : "vi";
   const pageUrl = `${baseUrl}/${localePath}`;
+
   const homeJsonLd = {
     "@context": "https://schema.org",
     "@type": "CafeOrCoffeeShop",
@@ -86,20 +165,33 @@ export default function HomePage() {
     empty: t("signature.empty"),
   };
 
-  const {
-    items: signatureItems,
-    isLoading: isSignatureLoading,
-    isError: isSignatureError,
-  } = useSignatureLineupShowcase(locale, 6);
+  const stackSliderSlides = sliderItems.slice(0, 6).map((item) => ({
+    title: item.name,
+    image: item.img,
+  }));
 
-  const stackSliderSlides = useMemo(
-    () =>
-      sliderItems.slice(0, 6).map((item) => ({
-        title: item.name,
-        image: item.img,
-      })),
-    [sliderItems]
-  );
+  let signatureProducts: Product[] = [];
+  let bestSellerProducts: Product[] = [];
+
+  try {
+    signatureProducts = await fetchSignatureLineup(locale, 6);
+  } catch (err) {
+    console.error("FETCH_SIGNATURE_LINEUP_FAILED", err);
+  }
+
+  try {
+    bestSellerProducts = await fetchBestSellers(locale, 4);
+  } catch (err) {
+    console.error("FETCH_BEST_SELLERS_FAILED", err);
+  }
+
+  const signatureItems =
+    signatureProducts.length > 0
+      ? mapProductsToShowcaseItems(signatureProducts)
+      : FALLBACK_SIGNATURE_ITEMS;
+  const signatureHasServerData = signatureProducts.length > 0;
+  const signatureUsingFallback =
+    signatureProducts.length === 0 && signatureItems.length > 0;
 
   return (
     <main className="min-h-screen">
@@ -107,7 +199,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
       />
-      {/* Stack slider */}
+
       {stackSliderSlides.length > 0 && (
         <section className="stack-slider-section py-12 text-stone-900 relative">
           <div className="mx-auto mt-6 max-w-6xl px-4">
@@ -116,21 +208,9 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Product slider */}
-      {/* <section className="relative">
-        <ProductSlider
-          items={sliderItems}
-          autoPlay
-          autoPlayDelay={4200}
-          transitionDuration={0.65}
-        />
-      </section> */}
-
-      {/* Text on scroll */}
       <section className="bg-linear-to-r from-amber-500 to-rose-400 text-white">
         <FadeIn direction="right">
           <div className="mx-auto flex w-full flex-col gap-10 lg:flex-row lg:items-center">
-            {/* Left image */}
             <div className="hidden lg:block w-full max-w-sm mx-auto overflow-hidden border border-white/20 shadow-2xl lg:mx-0 lg:ml-auto">
               <div className="relative h-80 w-full sm:h-80 md:h-80 lg:h-[360px]">
                 <Image
@@ -144,7 +224,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Center text */}
             <div className="relative w-full lg:w-1/2">
               <TextOnScroll className="text-lg sm:text-xl md:text-2xl text-white leading-snug text-balance">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 text-white text-balance">
@@ -156,7 +235,6 @@ export default function HomePage() {
               </TextOnScroll>
             </div>
 
-            {/* Right image */}
             <div className="hidden lg:block w-full max-w-sm mx-auto overflow-hidden border border-white/20 shadow-2xl lg:mx-0 lg:ml-auto">
               <div className="relative h-80 w-full sm:h-80 md:h-80 lg:h-[360px]">
                 <Image
@@ -173,22 +251,18 @@ export default function HomePage() {
         </FadeIn>
       </section>
 
-      {/* Best sellers */}
       <FadeIn direction="left">
-        <BestSellersSection />
+        <BestSellersSection items={bestSellerProducts} />
       </FadeIn>
 
-      {/* Home story and stats */}
       <FadeIn direction="right">
         <HomeStoryAndStats />
       </FadeIn>
 
-      {/* Stroke SVG */}
       <section>
         <ScrollStrokePage />
       </section>
 
-      {/* Signature line */}
       <section id="product-showcase" className="mx-auto mt-12 max-w-6xl px-4">
         <div className="text-center">
           <p className="text-3xl font-semibold uppercase tracking-[0.3em] text-amber-600">
@@ -197,15 +271,13 @@ export default function HomePage() {
           <p className="mt-2 text-sm text-stone-500">{signatureText.sub}</p>
         </div>
 
-        {isSignatureLoading && signatureItems.length === 0 && (
+        {!signatureHasServerData && !signatureUsingFallback && (
           <p className="mt-6 text-sm text-stone-500">{signatureText.loading}</p>
         )}
 
-        {!isSignatureLoading &&
-          !isSignatureError &&
-          signatureItems.length === 0 && (
-            <p className="mt-6 text-sm text-stone-500">{signatureText.empty}</p>
-          )}
+        {!signatureHasServerData && signatureItems.length === 0 && (
+          <p className="mt-6 text-sm text-stone-500">{signatureText.empty}</p>
+        )}
 
         {signatureItems.length > 0 && (
           <ProductShowcase
