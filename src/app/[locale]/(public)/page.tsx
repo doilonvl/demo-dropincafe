@@ -10,13 +10,10 @@ import HomeStoryAndStats from "@/components/home/HomeStory";
 import { StackSlider } from "@/components/animation/StackSlider";
 import FadeIn from "@/components/animation/FadeIn";
 import ScrollStrokePage from "@/components/animation/ScrollStrokePage";
-import {
-  fetchBestSellers,
-  fetchSignatureLineup,
-  HOME_REVALIDATE_SECONDS,
-} from "./_data/home";
+import { fetchBestSellers, fetchSignatureLineup } from "./_data/home";
 
-export const revalidate = HOME_REVALIDATE_SECONDS;
+// Next.js requires segment config values to be statically analyzable in the same file.
+export const revalidate = 300;
 
 type ShowcaseItem = {
   id: string;
