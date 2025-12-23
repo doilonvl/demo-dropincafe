@@ -17,7 +17,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: { default: "Drop In Cafe", template: "%s | Drop In Cafe" },
   icons: {
-    icon: [{ url: "/Logo/Logo1.jpg", rel: "icon", type: "image/jpeg" }],
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.png",
   },
   openGraph: {
     siteName: "Drop In Cafe",
