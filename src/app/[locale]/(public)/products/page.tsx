@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import type { Locale } from "@/types/content";
-import { getSiteUrl } from "@/lib/env";
+import type { Locale, Paged, Product, ProductDto } from "@/types/content";
+import { getApiBaseUrl, getSiteUrl } from "@/lib/env";
+import { mapProductDtoToView } from "@/lib/product-mapper";
 import { getProductDetailPath, getProductsListingPath } from "@/lib/routes";
 import ProductsPageClient from "./ProductsPageClient";
 
@@ -25,6 +26,28 @@ type PageParams = {
   params: Promise<{ locale: Locale }>;
   searchParams?: Promise<{ slug?: string | string[] }>;
 };
+
+async function fetchProducts(locale: Locale): Promise<Product[]> {
+  const baseUrl = getApiBaseUrl();
+  const url = new URL(`${baseUrl}/products`);
+  url.searchParams.set("locale", locale);
+  url.searchParams.set("page", "1");
+  url.searchParams.set("limit", "40");
+  url.searchParams.set("withCount", "false");
+  url.searchParams.set("isPublished", "true");
+
+  try {
+    const res = await fetch(url.toString(), {
+      next: { revalidate: 300 },
+    });
+    if (!res.ok) return [];
+    const data = (await res.json()) as Paged<ProductDto>;
+    return data.items?.map((item) => mapProductDtoToView(item, locale)) ?? [];
+  } catch (err) {
+    console.error("FETCH_PRODUCTS_FAILED", err);
+    return [];
+  }
+}
 
 function buildListingMetadata(locale: Locale): Metadata {
   const meta = LISTING_META[locale === "en" ? "en" : "vi"];
@@ -78,5 +101,6 @@ export default async function ProductsPage({
     redirect(getProductDetailPath(locale, normalizedSlug));
   }
 
-  return <ProductsPageClient />;
+  const products = await fetchProducts(locale);
+  return <ProductsPageClient initialProducts={products} />;
 }

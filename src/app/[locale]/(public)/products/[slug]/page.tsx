@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
-import type { Locale, LocalizedString, ProductDto } from "@/types/content";
-import { pickLocalized } from "@/lib/product-mapper";
+import type {
+  Locale,
+  LocalizedString,
+  Product,
+  ProductDto,
+} from "@/types/content";
+import { mapProductDtoToView, pickLocalized } from "@/lib/product-mapper";
 import { getApiBaseUrl, getSiteUrl } from "@/lib/env";
 import { getProductDetailPath, getProductsListingPath } from "@/lib/routes";
 import ProductsPageClient from "../ProductsPageClient";
@@ -73,6 +78,15 @@ async function fetchProductBySlug(
   if (!res.ok) return null;
 
   return (await res.json()) as ProductSeoDto;
+}
+
+async function fetchProductViewBySlug(
+  slug: string,
+  locale: Locale
+): Promise<Product | null> {
+  const dto = await fetchProductBySlug(slug, locale);
+  if (!dto) return null;
+  return mapProductDtoToView(dto, locale);
 }
 
 function buildListingMetadata(locale: Locale): Metadata {
@@ -166,8 +180,16 @@ export async function generateMetadata({
 }
 
 export default async function ProductDetailPage({ params }: PageParams) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const normalizedSlug = slug?.trim() || "";
+  const product = normalizedSlug
+    ? await fetchProductViewBySlug(normalizedSlug, locale)
+    : null;
 
-  return <ProductsPageClient initialSlug={normalizedSlug} />;
+  return (
+    <ProductsPageClient
+      initialSlug={normalizedSlug}
+      initialProduct={product ?? undefined}
+    />
+  );
 }

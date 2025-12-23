@@ -79,7 +79,7 @@ const COPY: Record<
     bannerTitle: "Menu thức uống",
     bannerDescription:
       "Ngồi bên đường tàu Hà Nội, nhâm nhi cà phê, trà hoặc món signature hợp mood tại Drop In Cafe.",
-    sectionEyebrow: "Our menu",
+    sectionEyebrow: "Menu thuc uong",
     sectionTitle: "Tất cả thức uống",
     sectionDescription:
       "Dù bạn ghé vội mang đi hay ngồi lại làm việc, Drop In Cafe luôn có một ly dành cho bạn: cà phê phin, espresso, cold brew, trà trái cây và các món không cà phê nhẹ nhàng.",
@@ -153,8 +153,12 @@ function mapViewProductToCardData(p: ApiProduct): ProductCardData {
 
 export default function ProductsPageClient({
   initialSlug,
+  initialProducts,
+  initialProduct,
 }: {
   initialSlug?: string;
+  initialProducts?: ApiProduct[];
+  initialProduct?: ApiProduct | null;
 }) {
   const locale = useLocale() as Locale;
   const searchParams = useSearchParams();
@@ -204,6 +208,12 @@ export default function ProductsPageClient({
   const LOAD_STEP = 8;
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
 
+  const initialMappedProducts = useMemo(
+    () =>
+      initialProducts?.length ? mapApiProductsToCardData(initialProducts) : [],
+    [initialProducts]
+  );
+
   const { data, isLoading, isError, error, isFetching } = useGetProductsQuery(
     {
       locale,
@@ -213,13 +223,11 @@ export default function ProductsPageClient({
     { refetchOnMountOrArgChange: false }
   );
 
-  const {
-    data: slugProduct,
-    isFetching: slugFetching,
-    isError: slugError,
-  } = useGetProductBySlugQuery(
+  const { data: slugProduct } = useGetProductBySlugQuery(
     { locale, slug: slugFilter },
-    { skip: !slugFilter }
+    {
+      skip: !slugFilter || initialProduct?.slug?.toLowerCase() === slugFilter,
+    }
   );
 
   // Cache per-locale products so switching locale shows instantly if already fetched
@@ -237,10 +245,29 @@ export default function ProductsPageClient({
     }
   }, [mappedProducts, locale]);
 
+  useEffect(() => {
+    if (initialMappedProducts.length > 0 && !cachedProducts.current[locale]) {
+      cachedProducts.current[locale] = initialMappedProducts;
+    }
+  }, [initialMappedProducts, locale]);
+
   const products =
     mappedProducts.length > 0
       ? mappedProducts
+      : initialMappedProducts.length > 0
+      ? initialMappedProducts
       : cachedProducts.current[locale] || [];
+
+  const resolvedSlugProduct =
+    slugProduct ||
+    (initialProduct?.slug?.toLowerCase() === slugFilter
+      ? initialProduct
+      : undefined);
+  const bannerTitle = resolvedSlugProduct?.name || copy.bannerTitle;
+  const bannerDescription =
+    resolvedSlugProduct?.shortDescription ||
+    resolvedSlugProduct?.description ||
+    copy.bannerDescription;
 
   const availableCategories = useMemo(() => {
     const set = new Set<ProductCategory>();
@@ -273,8 +300,9 @@ export default function ProductsPageClient({
 
   const filteredProducts = useMemo(() => {
     if (slugFilter) {
-      if (slugProduct)
-        return [mapViewProductToCardData(slugProduct as ApiProduct)];
+      if (resolvedSlugProduct) {
+        return [mapViewProductToCardData(resolvedSlugProduct as ApiProduct)];
+      }
       return [];
     }
 
@@ -285,7 +313,10 @@ export default function ProductsPageClient({
     }
 
     return result;
-  }, [products, category, slugFilter, slugProduct]);
+  }, [products, category, slugFilter, resolvedSlugProduct]);
+
+  const hasResults = filteredProducts.length > 0;
+  const showEmptyState = !isLoading && !isError && !hasResults;
 
   // Reset visible count on category change
   useEffect(() => {
@@ -372,11 +403,16 @@ export default function ProductsPageClient({
                 {copy.bannerEyebrow}
               </p>
               <h1 className="mt-2 text-2xl font-semibold text-neutral-50 md:text-3xl lg:text-4xl">
-                {copy.bannerTitle}
+                {bannerTitle}
               </h1>
               <p className="mt-3 max-w-xl text-sm text-neutral-100/85 md:text-base">
-                {copy.bannerDescription}
+                {bannerDescription}
               </p>
+              {resolvedSlugProduct?.price != null && (
+                <p className="mt-2 text-sm font-semibold text-neutral-100/95">
+                  {formatPrice(resolvedSlugProduct.price, locale)}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -404,11 +440,11 @@ export default function ProductsPageClient({
 
         {/* Grid sản phẩm */}
         <div className="mt-8 md:mt-10" ref={gridRef}>
-          {isLoading && products.length === 0 && (
+          {isLoading && !hasResults && (
             <p className="text-sm text-neutral-500">{copy.loading}</p>
           )}
 
-          {isError && products.length === 0 && (
+          {isError && !hasResults && (
             <div className="text-sm text-red-500 space-y-1">
               <p>{copy.error}</p>
               <pre className="mt-2 overflow-auto rounded bg-red-50 p-2 text-xs text-red-700">
@@ -417,29 +453,25 @@ export default function ProductsPageClient({
             </div>
           )}
 
-          {products.length > 0 && (
-            <>
-              {filteredProducts.length === 0 ? (
-                <p className="text-sm text-neutral-500">{copy.emptyCategory}</p>
-              ) : (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-3 md:gap-4 lg:grid-cols-4">
-                  {visibleProducts.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      locale={locale}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
-          )}
+          {hasResults ? (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-3 md:gap-4 lg:grid-cols-4">
+              {visibleProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  locale={locale}
+                />
+              ))}
+            </div>
+          ) : showEmptyState ? (
+            <p className="text-sm text-neutral-500">{copy.emptyCategory}</p>
+          ) : null}
 
-          {isFetching && products.length > 0 && (
+          {isFetching && hasResults && (
             <p className="mt-3 text-xs text-neutral-500">{copy.update}</p>
           )}
 
-          {(hasMore || showingAll) && filteredProducts.length > 0 && (
+          {(hasMore || showingAll) && hasResults && (
             <div className="mt-8 flex justify-center">
               {hasMore ? (
                 <button

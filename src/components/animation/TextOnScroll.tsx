@@ -41,6 +41,8 @@ export default function TextOnScroll({
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [scrollDir, setScrollDir] = useState<"down" | "up">("down");
   const containerRef = useRef<HTMLElement | null>(null);
+  const lastScrollYRef = useRef(0);
+  const scrollDirRef = useRef<"down" | "up">("down");
   const isInView = useInView(containerRef, { amount: 0.4, margin: "-5% 0px" });
 
   useEffect(() => setMounted(true), []);
@@ -58,16 +60,21 @@ export default function TextOnScroll({
 
   // detect scroll direction to reverse stagger when scrolling up
   useEffect(() => {
-    let lastY = window.scrollY;
+    lastScrollYRef.current = window.scrollY;
     const onScroll = () => {
       const currentY = window.scrollY;
-      const dir = currentY > lastY ? "down" : "up";
-      if (dir !== scrollDir) setScrollDir(dir);
-      lastY = currentY;
+      const delta = currentY - lastScrollYRef.current;
+      if (Math.abs(delta) < 12) return;
+      const dir = delta > 0 ? "down" : "up";
+      if (dir !== scrollDirRef.current) {
+        scrollDirRef.current = dir;
+        setScrollDir(dir);
+      }
+      lastScrollYRef.current = currentY;
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [scrollDir]);
+  }, []);
 
   const rawContent = useMemo<React.ReactNode>(() => {
     return text ?? children;
