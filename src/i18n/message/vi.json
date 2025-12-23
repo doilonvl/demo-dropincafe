@@ -34,14 +34,14 @@
       "empty": "Hiện chưa có sản phẩm nào được đánh dấu Signature Lineup."
     },
     "scrollStroke": {
-      "card1Title": "Đặt trước, lấy đúng giờ",
-      "card1Body": "DropInCafe gom đơn online, sắp xếp hàng barista để ly sẵn sàng khi bạn ghé bên cạnh Phố Tàu; không phải đoán chờ, chỉ quét mã và lấy.",
-      "card2Title": "Giấy tờ ngập bàn, ca vẫn êm cùng DropInCafe",
-      "card2Body": "Email, báo cáo và tin nhắn khách dồn dập, nhưng nhịp quán vẫn rõ ràng trên một màn hình. DropInCafe gom đơn, xếp hàng pickup và nhắc bạn từng ly trà, ly cà phê đúng giờ – bạn chỉ cần tập trung vào công việc trước mặt và nhấp một ngụm đồ uống yêu thích.",
-      "img1Alt": "Quầy DropInCafe với khách đặt món online",
-      "img2Alt": "Bảng điều phối đơn pickup của DropInCafe",
-      "img3Alt": "Barista thao tác theo hàng đợi pickup của DropInCafe cạnh Phố Tàu",
-      "img4Alt": "Khách nhận cà phê tại quầy pickup DropInCafe"
+      "card1Title": "Đặt trước thảnh thơi, lấy ngay đúng lúc",
+      "card1Body": "DropInCafe đồng bộ đơn hàng với nhịp làm việc của barista để ly cà phê sẵn sàng ngay khi bạn bước đến bên Phố Đường Tàu. Không còn cảnh chờ đợi thấp thỏm, chỉ cần quét mã, nhận món và tận hưởng không gian.",
+      "card2Title": "Deadline dồn dập, vẫn êm cùng DropInCafe",
+      "card2Body": "Dù email hay báo cáo đang ngập bàn, bạn vẫn sẽ tìm thấy sự tập trung tuyệt đối tại đây. DropInCafe lo liệu mọi đơn hàng và phục vụ đúng nhịp, giúp bạn duy trì mạch làm việc trôi chảy bên cạnh tách trà thơm và tiếng tàu vọng lại.",
+      "img1Alt": "Quầy DropInCafe với khách đang nhận đơn đặt trước",
+      "img2Alt": "Màn hình hiển thị đơn pickup tại DropInCafe",
+      "img3Alt": "Barista pha chế theo hàng đợi bên cạnh cửa sổ Đường Tàu",
+      "img4Alt": "Khách hàng nhận ly cà phê tại quầy pickup DropInCafe"
     }
   },
   "header": {

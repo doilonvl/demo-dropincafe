@@ -34,14 +34,14 @@
       "empty": "No drinks are marked as Signature Lineup yet."
     },
     "scrollStroke": {
-      "card1Title": "Order ahead, pick up on time",
-      "card1Body": "DropInCafe batches online orders, times the barista queue, and keeps pickup smooth beside the Train Street so your latte is ready as you arrive; no guessing, just scan and go.",
-      "card2Title": "Busy shift, steady with a DropInCafe tea",
-      "card2Body": "Even when the pickup line buzzes, one DropInCafe tea keeps the barista flow balanced; guests still see clear steps so they know exactly when to walk to the counter by the tracks.",
-      "img1Alt": "DropInCafe counter with a guest placing an online order",
-      "img2Alt": "Dashboard grouping DropInCafe pickup orders",
-      "img3Alt": "Barista workflow following the DropInCafe pickup queue by Train Street",
-      "img4Alt": "Customer receiving a coffee at the DropInCafe pickup counter"
+      "card1Title": "Skip the Line, Catch the Vibe",
+      "card1Body": "We sync our barista rhythm with your arrival. Pre-order online, and your latte will be waiting perfectly hot right by the Train Street tracks. No guessing, no waiting—just scan, grab, and enjoy the view.",
+      "card2Title": "Heavy Workload? Find Your Flow Here",
+      "card2Body": "When emails and deadlines pile up, let DropInCafe keep you steady. Our seamless service ensures your tea or coffee arrives exactly when you need a boost, letting you stay focused on your screen while the train rolls by.",
+      "img1Alt": "Guest scanning to pick up a pre-ordered drink at DropInCafe",
+      "img2Alt": "DropInCafe digital order dashboard for seamless pickup",
+      "img3Alt": "Barista preparing drinks efficiently by the Train Street window",
+      "img4Alt": "Customer grabbing a coffee cup at the pickup counter"
     }
   },
   "header": {
