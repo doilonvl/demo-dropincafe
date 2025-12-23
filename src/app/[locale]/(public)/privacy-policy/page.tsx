@@ -66,7 +66,7 @@ const PRIVACY_META = {
 } as const;
 
 function getLocalePrefix(locale: Locale) {
-  return locale === "en" ? "/en" : "/vi";
+  return locale === "en" ? "/en" : "";
 }
 
 export async function generateMetadata({
@@ -75,7 +75,9 @@ export async function generateMetadata({
   const { locale } = await params;
   const meta = PRIVACY_META[locale === "en" ? "en" : "vi"];
   const prefix = getLocalePrefix(locale);
-  const canonical = `${BASE_URL}${prefix}/privacy-policy`;
+  const canonical = prefix
+    ? `${BASE_URL}${prefix}/privacy-policy`
+    : `${BASE_URL}/privacy-policy`;
 
   return {
     title: { absolute: meta.title },
@@ -83,7 +85,7 @@ export async function generateMetadata({
     alternates: {
       canonical,
       languages: {
-        "vi-VN": `${BASE_URL}/vi/privacy-policy`,
+        "vi-VN": `${BASE_URL}/privacy-policy`,
         en: `${BASE_URL}/en/privacy-policy`,
       },
     },

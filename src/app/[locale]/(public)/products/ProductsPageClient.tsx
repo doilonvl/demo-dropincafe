@@ -12,7 +12,7 @@ import type {
   ProductCategory,
 } from "@/types/content";
 import { getSiteUrl } from "@/lib/env";
-import { getProductsListingPath } from "@/lib/routes";
+import { getLocalePrefix, getProductsListingPath } from "@/lib/routes";
 
 type Category = "all" | ProductCategory;
 
@@ -166,6 +166,8 @@ export default function ProductsPageClient({
   const copy = COPY[locale] ?? COPY.vi;
   const baseUrl = BASE_URL;
   const localePath = locale === "en" ? "en" : "vi";
+  const localePrefix = getLocalePrefix(locale);
+  const homeUrl = localePrefix ? `${baseUrl}${localePrefix}` : `${baseUrl}/`;
   const listingPath = getProductsListingPath(locale);
   const pageUrl = `${baseUrl}${listingPath}`;
   const productSeoJsonLd = {
@@ -184,7 +186,7 @@ export default function ProductsPageClient({
             "@type": "ListItem",
             position: 1,
             name: "Drop In Cafe",
-            item: `${baseUrl}/${localePath}`,
+            item: homeUrl,
           },
           {
             "@type": "ListItem",

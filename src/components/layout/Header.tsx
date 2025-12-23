@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
@@ -7,6 +8,7 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { getLocalePrefix } from "@/lib/routes";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import {
   Sheet,
@@ -32,6 +34,8 @@ export default function Header() {
   const t = useTranslations("header");
   const pathname = usePathname();
   const router = useRouter();
+  const localePrefix = getLocalePrefix(locale as "vi" | "en");
+  const homeHref = localePrefix || "/";
 
   const navItems: NavItem[] = useMemo(
     () => [
@@ -43,9 +47,10 @@ export default function Header() {
   );
 
   const isHome = useMemo(() => {
-    const base = `/${locale}`;
+    const base = localePrefix || "/";
+    if (base === "/") return pathname === "/";
     return pathname === base || pathname === `${base}/`;
-  }, [locale, pathname]);
+  }, [localePrefix, pathname]);
 
   const scrollToTarget = useCallback((targetId: string) => {
     if (typeof window === "undefined") return;
@@ -99,7 +104,7 @@ export default function Header() {
           setIsMenuOpen(false);
           return;
         }
-        window.location.href = `/${locale}#contact`;
+        window.location.href = `${homeHref}#contact`;
         setIsMenuOpen(false);
         return;
       }
@@ -108,11 +113,11 @@ export default function Header() {
         scrollToTarget(item.target);
         setIsMenuOpen(false);
       } else if (typeof window !== "undefined") {
-        window.location.href = `/${locale}#${item.target}`;
+        window.location.href = `${homeHref}#${item.target}`;
         setIsMenuOpen(false);
       }
     },
-    [isHome, locale, router, scrollToFooter, scrollToTarget]
+    [homeHref, isHome, router, scrollToFooter, scrollToTarget]
   );
 
   useEffect(() => {
@@ -126,7 +131,7 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 text-white">
-        <Link href={`/${locale}`} className="pointer-events-auto">
+        <Link href={homeHref} className="pointer-events-auto">
           <Image
             src="/Logo/Logo1.jpg"
             alt="Drop In Cafe"

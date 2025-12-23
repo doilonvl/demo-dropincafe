@@ -17,7 +17,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: { default: "Drop In Cafe", template: "%s | Drop In Cafe" },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.png", type: "image/png", sizes: "96x96" },
+      { url: "/favicon.ico" },
+    ],
     shortcut: "/favicon.ico",
     apple: "/apple-icon.png",
   },

@@ -15,6 +15,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
+import { getLocalePrefix } from "@/lib/routes";
 
 type DayHours = { day: string; start: string; end: string };
 
@@ -36,6 +37,7 @@ const isOpenNow = () => {
 export default function Footer() {
   const t = useTranslations("footer");
   const locale = useLocale();
+  const localePrefix = getLocalePrefix(locale as "vi" | "en");
   const [isOpen, setIsOpen] = useState(isOpenNow());
   const [showPopup, setShowPopup] = useState(false);
 
@@ -224,7 +226,7 @@ export default function Footer() {
           <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-amber-100 pt-4 text-xs text-slate-600 md:flex-row">
             <p>{t("legal", { year: new Date().getFullYear() })}</p>
             <Link
-              href={`/${locale}/privacy-policy`}
+              href={`${localePrefix}/privacy-policy`}
               className="font-semibold text-slate-700 underline decoration-amber-400 decoration-2 underline-offset-4 transition hover:text-amber-600"
             >
               {t("privacyPolicy")}

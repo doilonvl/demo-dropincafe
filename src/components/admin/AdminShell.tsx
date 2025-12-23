@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { Link } from "@/i18n/navigation";
+import { getLocalePrefix } from "@/lib/routes";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
@@ -37,6 +38,9 @@ export default function AdminShell({
   const pathname = usePathname();
   const params = useParams();
   const locale = String(params?.locale || "vi");
+  const localePrefix = getLocalePrefix(locale as "vi" | "en");
+  const loginPath = localePrefix ? `${localePrefix}/login` : "/login";
+  const adminBase = `${localePrefix}/admin`;
 
   const [collapsed, setCollapsed] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
@@ -57,7 +61,7 @@ export default function AdminShell({
     } catch (err) {
       console.error("logout failed", err);
     } finally {
-      router.replace(`/${locale}/login`);
+      router.replace(loginPath);
     }
   }
 
@@ -110,10 +114,9 @@ export default function AdminShell({
                 const href = path; // Link sẽ tự thêm locale
                 const isDashboard = !it.slug;
                 const active = isDashboard
-                  ? pathname === `/${locale}/admin` ||
-                    pathname === `/${locale}/admin/`
-                  : pathname === `/${locale}${path}` ||
-                    pathname.startsWith(`/${locale}${path}/`);
+                  ? pathname === adminBase || pathname === `${adminBase}/`
+                  : pathname === `${localePrefix}${path}` ||
+                    pathname.startsWith(`${localePrefix}${path}/`);
                 const Icon = it.icon;
 
                 return (

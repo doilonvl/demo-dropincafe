@@ -1,7 +1,7 @@
 import type { Locale } from "@/types/content";
 
 const LOCALE_PREFIX: Record<Locale, string> = {
-  vi: "/vi",
+  vi: "",
   en: "/en",
 };
 
@@ -17,4 +17,8 @@ export function getProductsListingPath(locale: Locale) {
 export function getProductDetailPath(locale: Locale, slug: string) {
   const safeSlug = encodeURIComponent(slug);
   return `${getProductsListingPath(locale)}/${safeSlug}`;
+}
+
+export function getLocalePrefix(locale: Locale) {
+  return LOCALE_PREFIX[locale];
 }

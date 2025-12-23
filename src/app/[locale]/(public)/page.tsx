@@ -33,7 +33,7 @@ const HOME_META = {
 } as const;
 
 function getLocalePrefix(locale: Locale) {
-  return locale === "en" ? "/en" : "/vi";
+  return locale === "en" ? "/en" : "";
 }
 
 export async function generateMetadata({
@@ -44,7 +44,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const meta = HOME_META[locale === "en" ? "en" : "vi"];
   const prefix = getLocalePrefix(locale);
-  const canonical = `${BASE_URL}${prefix}`;
+  const canonical = prefix ? `${BASE_URL}${prefix}` : `${BASE_URL}/`;
 
   return {
     title: { absolute: meta.title },
@@ -52,7 +52,7 @@ export async function generateMetadata({
     alternates: {
       canonical,
       languages: {
-        "vi-VN": `${BASE_URL}/vi`,
+        "vi-VN": `${BASE_URL}/`,
         en: `${BASE_URL}/en`,
       },
     },
@@ -157,23 +157,39 @@ export default async function HomePage() {
   const t = await getTranslations("home");
 
   const baseUrl = BASE_URL;
-  const localePath = locale === "en" ? "en" : "vi";
-  const pageUrl = `${baseUrl}/${localePath}`;
+  const localePrefix = locale === "en" ? "/en" : "";
+  const pageUrl = localePrefix ? `${baseUrl}${localePrefix}` : `${baseUrl}/`;
+
+  const alternateNames = ["Dropin Cafe", "Dropincafe", "Drop In Cafe Hanoi"];
 
   const homeJsonLd = {
     "@context": "https://schema.org",
-    "@type": "CafeOrCoffeeShop",
-    name: "Drop In Cafe",
-    url: pageUrl,
-    image: `${baseUrl}/Logo/Logo1.jpg`,
-    address: {
-      addressLocality: "Hanoi",
-      addressCountry: "VN",
-    },
-    servesCuisine: ["Coffee", "Tea"],
-    sameAs: [
-      "https://www.facebook.com/dropincafevn",
-      "https://www.instagram.com/dropincafevn",
+    "@graph": [
+      {
+        "@type": "CafeOrCoffeeShop",
+        "@id": `${pageUrl}#cafe`,
+        name: "Drop In Cafe",
+        alternateName: alternateNames,
+        url: pageUrl,
+        image: `${baseUrl}/Logo/Logo1.jpg`,
+        address: {
+          addressLocality: "Hanoi",
+          addressCountry: "VN",
+        },
+        servesCuisine: ["Coffee", "Tea"],
+        sameAs: [
+          "https://www.facebook.com/dropincafevn",
+          "https://www.instagram.com/dropincafevn",
+        ],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${pageUrl}#website`,
+        name: "Drop In Cafe",
+        alternateName: alternateNames,
+        url: pageUrl,
+        inLanguage: locale === "en" ? "en" : "vi-VN",
+      },
     ],
   };
 

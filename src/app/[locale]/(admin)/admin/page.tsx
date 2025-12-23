@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useGetProductsAdminQuery } from "@/services/admin.products";
+import { getLocalePrefix } from "@/lib/routes";
 import {
   Package,
   CheckCircle2,
@@ -54,6 +55,8 @@ function StatPill({
 export default function AdminHome() {
   const params = useParams();
   const locale = String(params?.locale || "vi");
+  const localePrefix = getLocalePrefix(locale as "vi" | "en");
+  const adminProductsPath = `${localePrefix}/admin/products`;
 
   const all = useProductCount();
   const published = useProductCount({ isPublished: true });
@@ -104,7 +107,7 @@ export default function AdminHome() {
           </div>
           <div className="flex items-center gap-3">
             <Button asChild size="lg">
-              <Link href={`/${locale}/admin/products`}>
+              <Link href={adminProductsPath}>
                 Mở quản lý Products
                 <ArrowUpRight className="ml-2 h-4 w-4" />
               </Link>

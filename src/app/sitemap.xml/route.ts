@@ -74,12 +74,6 @@ export async function GET() {
       loc: `${base}/`,
       lastmod: now,
       changefreq: "weekly",
-      priority: 0.6,
-    },
-    {
-      loc: `${base}/vi`,
-      lastmod: now,
-      changefreq: "weekly",
       priority: 1.0,
     },
     {
@@ -101,7 +95,7 @@ export async function GET() {
       priority: 0.8,
     },
     {
-      loc: `${base}/vi/privacy-policy`,
+      loc: `${base}/privacy-policy`,
       lastmod: now,
       changefreq: "yearly",
       priority: 0.3,

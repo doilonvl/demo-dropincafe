@@ -7,12 +7,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { getLocalePrefix } from "@/lib/routes";
 
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = useParams();
   const locale = String(params?.locale || "vi");
+  const localePrefix = getLocalePrefix(locale as "vi" | "en");
+  const adminPath = `${localePrefix}/admin`;
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -36,7 +39,7 @@ export default function LoginPage() {
         throw new Error(data?.message || "Đăng nhập thất bại");
       }
 
-      const nextUrl = searchParams.get("next") || `/${locale}/admin`;
+      const nextUrl = searchParams.get("next") || adminPath;
       router.replace(nextUrl);
     } catch (err: any) {
       setError(err?.message || "Có lỗi xảy ra");
