@@ -18,10 +18,9 @@ import type {
   TemperatureOption,
 } from "@/types/content";
 import { mapProductDtoToView, pickLocalized } from "@/lib/product-mapper";
+import { getApiBaseUrl } from "@/lib/env";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
-  "http://localhost:5001/api/v1";
+const BASE_URL = getApiBaseUrl();
 
 function getClientToken() {
   if (typeof window === "undefined") return null;

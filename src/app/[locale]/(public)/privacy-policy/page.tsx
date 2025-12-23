@@ -18,6 +18,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/types/content";
+import { getSiteUrl } from "@/lib/env";
 
 type PageParams = {
   params: Promise<{ locale: Locale }>;
@@ -48,15 +49,57 @@ const ICONS: Record<string, LucideIcon> = {
   UserCheck,
 };
 
+const BASE_URL = getSiteUrl();
+const DEFAULT_OG_IMAGE = "https://www.dropincafe.com.vn/Home/home3.jpg";
+
+const PRIVACY_META = {
+  vi: {
+    title: "Chính sách bảo mật – Drop In Cafe",
+    description:
+      "Chính sách bảo mật của Drop In Cafe giải thích cách chúng tôi thu thập, sử dụng, lưu trữ và bảo vệ dữ liệu khi bạn truy cập website, đặt đồ uống, đặt bàn hoặc liên hệ với quán.",
+  },
+  en: {
+    title: "Privacy policy – Drop In Cafe",
+    description:
+      "Drop In Cafe’s privacy policy explains how we collect, use, store and protect your data when you visit our website, place drink orders, book a table or contact us.",
+  },
+} as const;
+
+function getLocalePrefix(locale: Locale) {
+  return locale === "en" ? "/en" : "/vi";
+}
+
 export async function generateMetadata({
   params,
 }: PageParams): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "privacy" });
+  const meta = PRIVACY_META[locale === "en" ? "en" : "vi"];
+  const prefix = getLocalePrefix(locale);
+  const canonical = `${BASE_URL}${prefix}/privacy-policy`;
 
   return {
-    title: t("metaTitle"),
-    description: t("metaDescription"),
+    title: { absolute: meta.title },
+    description: meta.description,
+    alternates: {
+      canonical,
+      languages: {
+        "vi-VN": `${BASE_URL}/vi/privacy-policy`,
+        en: `${BASE_URL}/en/privacy-policy`,
+      },
+    },
+    openGraph: {
+      title: meta.title,
+      description: meta.description,
+      url: canonical,
+      type: "website",
+      images: [DEFAULT_OG_IMAGE],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.title,
+      description: meta.description,
+      images: [DEFAULT_OG_IMAGE],
+    },
   };
 }
 

@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { useGetProductsQuery } from "@/services/api";
+import { getProductDetailPath, getProductsListingPath } from "@/lib/routes";
 import type { Locale, Product as ApiProduct } from "@/types/content";
 
 export type ShowcaseProduct = {
@@ -15,52 +16,54 @@ export type ShowcaseItem = ShowcaseProduct & {
   id: string;
 };
 
-const FALLBACK_SIGNATURE_ITEMS: ShowcaseItem[] = [
+type FallbackShowcaseItem = Omit<ShowcaseItem, "route"> & { slug: string };
+
+const FALLBACK_SIGNATURE_ITEMS: FallbackShowcaseItem[] = [
   {
     id: "fallback-1",
     name: "Signature Blend",
     description: "Bold aroma from beans roasted fresh each day.",
     img: "/Signature/1.jpg",
-    route: "/products/signature-blend",
+    slug: "signature-blend",
   },
   {
     id: "fallback-2",
     name: "Cold Brew Citrus",
     description: "Deep-cold brew with a light citrus twist.",
     img: "/Signature/2.jpg",
-    route: "/products/cold-brew-citrus",
+    slug: "cold-brew-citrus",
   },
   {
     id: "fallback-3",
     name: "Classic Latte",
     description: "Steamed milk and gentle foam for slow mornings.",
     img: "/Signature/3.jpg",
-    route: "/products/classic-latte",
+    slug: "classic-latte",
   },
   {
     id: "fallback-4",
     name: "Matcha Fusion",
     description: "Creamy matcha layered with robust espresso.",
     img: "/Signature/4.jpg",
-    route: "/products/matcha-fusion",
+    slug: "matcha-fusion",
   },
   {
     id: "fallback-5",
     name: "Hazelnut Cappuccino",
     description: "Toasted hazelnut notes with silky foam.",
     img: "/Signature/5.jpg",
-    route: "/products/hazelnut-cappuccino",
+    slug: "hazelnut-cappuccino",
   },
   {
     id: "fallback-6",
     name: "Vietnamese Phin",
     description: "Traditional phin brew with a chocolaty finish.",
     img: "/Signature/6.jpg",
-    route: "/products/vietnamese-phin",
+    slug: "vietnamese-phin",
   },
 ];
 
-function mapApiToShowcaseItem(p: ApiProduct): ShowcaseItem {
+function mapApiToShowcaseItem(p: ApiProduct, locale: Locale): ShowcaseItem {
   const fallbackImg = "/Signature/1.jpg";
   const url = p.image?.url || "";
   const safeImg =
@@ -73,7 +76,9 @@ function mapApiToShowcaseItem(p: ApiProduct): ShowcaseItem {
     name: p.name,
     description: p.shortDescription || p.description || "",
     img: safeImg,
-    route: p.slug ? `/products?slug=${encodeURIComponent(p.slug)}` : "/products",
+    route: p.slug
+      ? getProductDetailPath(locale, p.slug)
+      : getProductsListingPath(locale),
   };
 }
 
@@ -87,15 +92,21 @@ export function useSignatureLineupShowcase(locale: Locale, limit = 6) {
 
   const items = useMemo<ShowcaseItem[]>(() => {
     if (data?.items && data.items.length > 0) {
-      return data.items.map(mapApiToShowcaseItem);
+      return data.items.map((item) => mapApiToShowcaseItem(item, locale));
     }
 
     if (isError) {
-      return FALLBACK_SIGNATURE_ITEMS;
+      return FALLBACK_SIGNATURE_ITEMS.map((item) => ({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        img: item.img,
+        route: getProductDetailPath(locale, item.slug),
+      }));
     }
 
     return [];
-  }, [data, isError]);
+  }, [data, isError, locale]);
 
   return {
     items,

@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 import { Caladea } from "next/font/google";
+import { getSiteUrl } from "@/lib/env";
 
 const caladea = Caladea({
   subsets: ["latin"],
@@ -10,11 +11,25 @@ const caladea = Caladea({
   variable: "--font-caladea",
 });
 
+const BASE_URL = getSiteUrl();
+
 export const metadata: Metadata = {
-  title: { default: "Drop in cafe", template: "%s | Drop in cafe" },
-  description:
-    "A cafe where you can drop in anytime to relax and enjoy a cup of coffee.",
-  icons: { icon: [{ url: "/Logo/Logo1.jpg", rel: "icon", type: "image/jpeg" }] },
+  metadataBase: new URL(BASE_URL),
+  title: { default: "Drop In Cafe", template: "%s | Drop In Cafe" },
+  icons: {
+    icon: [{ url: "/Logo/Logo1.jpg", rel: "icon", type: "image/jpeg" }],
+  },
+  openGraph: {
+    siteName: "Drop In Cafe",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default async function RootLayout({

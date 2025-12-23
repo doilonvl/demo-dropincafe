@@ -6,7 +6,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocale } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import type { Locale } from "@/i18n/request";
 import { Globe, Check, ChevronDown } from "lucide-react";
 
@@ -22,6 +22,7 @@ export default function LanguageSwitcher({
   const pathname = usePathname() || "/";
   const locale = useLocale() as Locale;
   const searchParams = useSearchParams();
+  const params = useParams();
 
   const [isOpen, setIsOpen] = useState(false);
   const [hash, setHash] = useState("");
@@ -65,10 +66,30 @@ export default function LanguageSwitcher({
     }, {});
   }, [searchParams]);
 
+  const routeParams = useMemo<
+    Record<string, string | string[]> | undefined
+  >(() => {
+    const entries = Object.entries(params ?? {}).filter(
+      ([key]) => key !== "locale"
+    );
+    if (entries.length === 0) return undefined;
+    return entries.reduce<Record<string, string | string[]>>(
+      (acc, [key, value]) => {
+        acc[key] = value as string | string[];
+        return acc;
+      },
+      {}
+    );
+  }, [params]);
+
   const goLocale = (target: Locale) => {
     if (target === locale) return;
 
-    const hrefBase = { pathname };
+    const needsParams = pathname.includes("[");
+    const hrefBase =
+      needsParams && routeParams
+        ? { pathname, params: routeParams }
+        : { pathname };
     const hrefWithQuery = queryObject
       ? { ...hrefBase, query: queryObject }
       : hrefBase;

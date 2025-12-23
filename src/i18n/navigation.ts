@@ -7,6 +7,10 @@ export const pathnames = {
     vi: "/san-pham",
     en: "/products",
   },
+  "/products/[slug]": {
+    vi: "/san-pham/[slug]",
+    en: "/products/[slug]",
+  },
   "/admin": {
     vi: "/admin",
     en: "/admin",

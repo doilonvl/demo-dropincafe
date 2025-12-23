@@ -113,7 +113,7 @@ export default function Footer() {
                 <p className="flex items-center gap-2">
                   <Instagram className="h-5 w-5 text-pink-500" />
                   <a
-                    href="https://instagram.com/dropincafevn"
+                    href="https://www.instagram.com/dropincafevn"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="transition hover:text-amber-600"

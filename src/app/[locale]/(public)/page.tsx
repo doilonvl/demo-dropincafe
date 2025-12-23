@@ -1,8 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
-
+import type { Metadata } from "next";
 import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Locale, Product } from "@/types/content";
+import { getSiteUrl } from "@/lib/env";
 import ProductShowcase from "@/components/animation/ProductShowcase";
 import TextOnScroll from "@/components/animation/TextOnScroll";
 import BestSellersSection from "@/components/home/BestSellers";
@@ -10,10 +10,67 @@ import HomeStoryAndStats from "@/components/home/HomeStory";
 import { StackSlider } from "@/components/animation/StackSlider";
 import FadeIn from "@/components/animation/FadeIn";
 import ScrollStrokePage from "@/components/animation/ScrollStrokePage";
+import { getProductDetailPath, getProductsListingPath } from "@/lib/routes";
 import { fetchBestSellers, fetchSignatureLineup } from "./_data/home";
 
-// Next.js requires segment config values to be statically analyzable in the same file.
 export const revalidate = 300;
+
+const BASE_URL = getSiteUrl();
+const DEFAULT_OG_IMAGE = "https://www.dropincafe.com.vn/Home/home3.jpg";
+
+const HOME_META = {
+  vi: {
+    title:
+      "Drop In Cafe – Cà phê trứng & specialty coffee bên đường tàu Hà Nội",
+    description:
+      "Drop In Cafe tại 163 Phùng Hưng, Phố Cổ Hà Nội, nổi tiếng với cà phê trứng, coconut coffee và không gian chill ngay cạnh phố đường tàu lịch sử. Ghé quán, ngồi nhìn tàu chạy hoặc đặt mang đi đúng giờ bạn cần.",
+  },
+  en: {
+    title: "Drop In Cafe – Egg coffee & specialty coffee by Hanoi Train Street",
+    description:
+      "Drop In Cafe at 163 Phung Hung, Hanoi Old Quarter, serving egg coffee, coconut coffee and specialty drinks in a cozy spot right next to the historic train street. Visit, sit for a train, or order takeout on time.",
+  },
+} as const;
+
+function getLocalePrefix(locale: Locale) {
+  return locale === "en" ? "/en" : "/vi";
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const meta = HOME_META[locale === "en" ? "en" : "vi"];
+  const prefix = getLocalePrefix(locale);
+  const canonical = `${BASE_URL}${prefix}`;
+
+  return {
+    title: { absolute: meta.title },
+    description: meta.description,
+    alternates: {
+      canonical,
+      languages: {
+        "vi-VN": `${BASE_URL}/vi`,
+        en: `${BASE_URL}/en`,
+      },
+    },
+    openGraph: {
+      title: meta.title,
+      description: meta.description,
+      url: canonical,
+      type: "website",
+      images: [DEFAULT_OG_IMAGE],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.title,
+      description: meta.description,
+      images: [DEFAULT_OG_IMAGE],
+    },
+  };
+}
 
 type ShowcaseItem = {
   id: string;
@@ -23,52 +80,57 @@ type ShowcaseItem = {
   route: string;
 };
 
-const FALLBACK_SIGNATURE_ITEMS: ShowcaseItem[] = [
+type ShowcaseSeedItem = Omit<ShowcaseItem, "route"> & { slug: string };
+
+const FALLBACK_SIGNATURE_ITEMS: ShowcaseSeedItem[] = [
   {
     id: "fallback-1",
     name: "Signature Blend",
     description: "Bold aroma from beans roasted fresh each day.",
     img: "/Signature/1.jpg",
-    route: "/products/signature-blend",
+    slug: "signature-blend",
   },
   {
     id: "fallback-2",
     name: "Cold Brew Citrus",
     description: "Deep-cold brew with a light citrus twist.",
     img: "/Signature/2.jpg",
-    route: "/products/cold-brew-citrus",
+    slug: "cold-brew-citrus",
   },
   {
     id: "fallback-3",
     name: "Classic Latte",
     description: "Steamed milk and gentle foam for slow mornings.",
     img: "/Signature/3.jpg",
-    route: "/products/classic-latte",
+    slug: "classic-latte",
   },
   {
     id: "fallback-4",
     name: "Matcha Fusion",
     description: "Creamy matcha layered with robust espresso.",
     img: "/Signature/4.jpg",
-    route: "/products/matcha-fusion",
+    slug: "matcha-fusion",
   },
   {
     id: "fallback-5",
     name: "Hazelnut Cappuccino",
     description: "Toasted hazelnut notes with silky foam.",
     img: "/Signature/5.jpg",
-    route: "/products/hazelnut-cappuccino",
+    slug: "hazelnut-cappuccino",
   },
   {
     id: "fallback-6",
     name: "Vietnamese Phin",
     description: "Traditional phin brew with a chocolaty finish.",
     img: "/Signature/6.jpg",
-    route: "/products/vietnamese-phin",
+    slug: "vietnamese-phin",
   },
 ];
 
-function mapProductsToShowcaseItems(products: Product[]): ShowcaseItem[] {
+function mapProductsToShowcaseItems(
+  products: Product[],
+  locale: Locale
+): ShowcaseItem[] {
   const fallbackImg = "/Signature/1.jpg";
 
   return (products || []).map((p) => {
@@ -84,8 +146,8 @@ function mapProductsToShowcaseItems(products: Product[]): ShowcaseItem[] {
       description: p.shortDescription || p.description || "",
       img: safeImg,
       route: p.slug
-        ? `/products?slug=${encodeURIComponent(p.slug)}`
-        : "/products",
+        ? getProductDetailPath(locale, p.slug)
+        : getProductsListingPath(locale),
     };
   });
 }
@@ -94,9 +156,7 @@ export default async function HomePage() {
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations("home");
 
-  const baseUrl = (
-    process.env.NEXT_PUBLIC_APP_URL || "https://dropincafe.com.vn"
-  ).replace(/\/$/, "");
+  const baseUrl = BASE_URL;
   const localePath = locale === "en" ? "en" : "vi";
   const pageUrl = `${baseUrl}/${localePath}`;
 
@@ -112,8 +172,8 @@ export default async function HomePage() {
     },
     servesCuisine: ["Coffee", "Tea"],
     sameAs: [
-      "https://www.facebook.com/dropincafe",
-      "https://www.instagram.com/dropincafe",
+      "https://www.facebook.com/dropincafevn",
+      "https://www.instagram.com/dropincafevn",
     ],
   };
 
@@ -122,25 +182,25 @@ export default async function HomePage() {
       name: t("slider.item1.name"),
       description: t("slider.item1.description"),
       img: "/Home/home1.jpg",
-      route: "/products/signature-blend",
+      route: getProductDetailPath(locale, "signature-blend"),
     },
     {
       name: t("slider.item2.name"),
       description: t("slider.item2.description"),
       img: "/Home/home2.jpg",
-      route: "/products/cold-brew-citrus",
+      route: getProductDetailPath(locale, "cold-brew-citrus"),
     },
     {
       name: t("slider.item3.name"),
       description: t("slider.item3.description"),
       img: "/Home/home5.jpg",
-      route: "/products/caramel-macchiato",
+      route: getProductDetailPath(locale, "caramel-macchiato"),
     },
     {
       name: t("slider.item4.name"),
       description: t("slider.item4.description"),
       img: "/Home/home4.jpg",
-      route: "/products/classic-latte",
+      route: getProductDetailPath(locale, "classic-latte"),
     },
   ];
 
@@ -184,8 +244,11 @@ export default async function HomePage() {
 
   const signatureItems =
     signatureProducts.length > 0
-      ? mapProductsToShowcaseItems(signatureProducts)
-      : FALLBACK_SIGNATURE_ITEMS;
+      ? mapProductsToShowcaseItems(signatureProducts, locale)
+      : FALLBACK_SIGNATURE_ITEMS.map((item) => ({
+          ...item,
+          route: getProductDetailPath(locale, item.slug),
+        }));
   const signatureHasServerData = signatureProducts.length > 0;
   const signatureUsingFallback =
     signatureProducts.length === 0 && signatureItems.length > 0;

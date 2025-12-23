@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @next/next/no-img-element */
 "use client";
@@ -10,9 +11,10 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 import FadeIn from "@/components/animation/FadeIn";
 import { useGetBestSellersQuery } from "@/services/api";
+import { getProductDetailPath, getProductsListingPath } from "@/lib/routes";
 import type { Product as ApiProduct, Locale } from "@/types/content";
 
 type Stat = {
@@ -466,11 +468,8 @@ export default function BestSellersCarousel({ items }: BestSellersProps) {
                             <Link
                               href={
                                 item.slug
-                                  ? {
-                                      pathname: "/products",
-                                      query: { slug: item.slug },
-                                    }
-                                  : "/products"
+                                  ? getProductDetailPath(locale, item.slug)
+                                  : getProductsListingPath(locale)
                               }
                               className="block h-80 w-full overflow-hidden rounded-tl-3xl rounded-bl-3xl bg-stone-100 md:h-[420px] lg:h-full"
                               onPointerDown={(e) => e.stopPropagation()}

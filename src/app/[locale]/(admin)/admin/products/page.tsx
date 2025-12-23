@@ -46,11 +46,9 @@ import {
   useDeleteProductMutation,
   useUploadProductImageMutation,
 } from "@/services/admin.products";
+import { getApiBaseUrl } from "@/lib/env";
 
-const BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
-  "http://localhost:5001/api/v1";
+const BASE = getApiBaseUrl();
 
 const CATEGORY_OPTIONS: { value: ProductCategory; label: string }[] = [
   { value: "coffee", label: "Coffee" },

@@ -1,23 +1,20 @@
 import { mapProductDtoToView } from "@/lib/product-mapper";
 import type { Locale, Product, ProductDto } from "@/types/content";
+import { getApiBaseUrl } from "@/lib/env";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
-  "http://localhost:5001/api/v1";
+const API_BASE_URL = getApiBaseUrl();
 
 export const HOME_REVALIDATE_SECONDS = 300;
 
 async function fetchJson<T>(path: string, locale: Locale) {
   const hasQuery = path.includes("?");
-  const url = `${BASE_URL}${path}${hasQuery ? "&" : "?"}locale=${locale}`;
+  const url = `${API_BASE_URL}${path}${hasQuery ? "&" : "?"}locale=${locale}`;
 
   const res = await fetch(url, {
-    // Cache/ISR like the Hasake setup
     next: { revalidate: HOME_REVALIDATE_SECONDS },
   });
 
   if (res.status === 404) {
-    // Treat 404 as "no data" instead of hard error to keep page rendering
     return null as T;
   }
 
