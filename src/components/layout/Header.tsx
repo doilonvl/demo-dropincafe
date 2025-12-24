@@ -133,7 +133,7 @@ export default function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 text-white">
         <Link href={homeHref} className="pointer-events-auto">
           <Image
-            src="/Logo/Logo1.jpg"
+            src="/Logo/Logo13.jpg"
             alt="Drop In Cafe"
             width={220}
             height={78}
