@@ -160,7 +160,7 @@ export default async function HomePage() {
   const localePrefix = locale === "en" ? "/en" : "";
   const pageUrl = localePrefix ? `${baseUrl}${localePrefix}` : `${baseUrl}/`;
 
-  const alternateNames = ["Dropin Cafe", "Dropincafe", "Drop In Cafe Hanoi"];
+  const alternateNames = ["Dropin Cafe", "Dropincafe", "Drop In Cafe Hanoi", "Drop in cafe"];
 
   const homeJsonLd = {
     "@context": "https://schema.org",
