@@ -30,7 +30,7 @@ export default function HomeStoryAndStats() {
 
           <FadeIn direction="down">
             <div className="stats-item">
-              <h1 className="counter">500+</h1>
+              <h1 className="counter">200K+</h1>
               <h2>{t("stat2")}</h2>
             </div>
           </FadeIn>
