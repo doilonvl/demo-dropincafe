@@ -12,6 +12,7 @@ import FadeIn from "@/components/animation/FadeIn";
 import ScrollStrokePage from "@/components/animation/ScrollStrokePage";
 import { getProductDetailPath, getProductsListingPath } from "@/lib/routes";
 import { fetchBestSellers, fetchSignatureLineup } from "./_data/home";
+import SocialEmbeds from "@/components/social/SocialEmbeds";
 
 export const revalidate = 300;
 
@@ -160,7 +161,12 @@ export default async function HomePage() {
   const localePrefix = locale === "en" ? "/en" : "";
   const pageUrl = localePrefix ? `${baseUrl}${localePrefix}` : `${baseUrl}/`;
 
-  const alternateNames = ["Dropin Cafe", "Dropincafe", "Drop In Cafe Hanoi", "Drop in cafe"];
+  const alternateNames = [
+    "Dropin Cafe",
+    "Dropincafe",
+    "Drop In Cafe Hanoi",
+    "Drop in cafe",
+  ];
 
   const homeJsonLd = {
     "@context": "https://schema.org",
@@ -364,6 +370,9 @@ export default async function HomePage() {
             start="top 65%"
           />
         )}
+      </section>
+      <section className="mb-16 mt-10 mx-auto w-full max-w-6xl px-4 sm:px-6 md:px-0">
+        <SocialEmbeds />
       </section>
     </main>
   );
