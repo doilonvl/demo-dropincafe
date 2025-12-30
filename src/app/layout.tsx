@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 import { Caladea } from "next/font/google";
 import { getSiteUrl } from "@/lib/env";
+import TawkTo from "@/components/TawkTo";
 
 const caladea = Caladea({
   subsets: ["latin"],
@@ -47,6 +48,7 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning className={caladea.variable}>
       <body>
         <Providers>{children}</Providers>
+        <TawkTo />
       </body>
     </html>
   );

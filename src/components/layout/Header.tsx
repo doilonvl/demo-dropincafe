@@ -30,6 +30,7 @@ export default function Header() {
   const [isVisible, setIsVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
+  const mobileMenuId = "mobile-menu-sheet";
   const locale = useLocale();
   const t = useTranslations("header");
   const pathname = usePathname();
@@ -144,7 +145,11 @@ export default function Header() {
 
         <div className="pointer-events-auto flex items-center gap-3">
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-            <SheetTrigger asChild className="md:hidden">
+            <SheetTrigger
+              asChild
+              className="md:hidden"
+              aria-controls={mobileMenuId}
+            >
               <button
                 type="button"
                 aria-label={t("openMenu")}
@@ -155,6 +160,7 @@ export default function Header() {
               </button>
             </SheetTrigger>
             <SheetContent
+              id={mobileMenuId}
               side="right"
               className="w-[62vw] max-w-[13rem] border-none bg-gradient-to-b from-neutral-950/95 via-neutral-900/90 to-black/85 text-white backdrop-blur-md"
             >

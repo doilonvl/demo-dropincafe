@@ -87,12 +87,13 @@
     ],
     "features": ["Price range: 40k - 100k VND", "100% local spot (16 ratings)"],
     "mapCta": "View on Google Maps",
+    "helpCenter": "Help Center",
     "modal": {
       "title": "Hours",
       "servicesTitle": "Services",
       "close": "Close"
     },
-    "legal": "Â© {year} Drop In Cafe. All rights reserved.",
+    "legal": "© {year} Drop In Cafe. All rights reserved.",
     "weekdays": [
       "Monday",
       "Tuesday",
@@ -260,7 +261,7 @@
       "description": "If you have questions or want to exercise your privacy rights, please reach us via:",
       "address": "163 Phung Hung, Cua Dong, Hoan Kiem, Ha Noi",
       "phone": "+84 961 689 163",
-      "email": "info@dropincafe.com.vn"
+      "email": "dropincafehn@gmail.com "
     },
     "rightsTitle": "Exercising your rights",
     "rightsCopy": "We respond within a reasonable timeframe (typically within 1?2 business days) and may verify your identity to protect your data.",

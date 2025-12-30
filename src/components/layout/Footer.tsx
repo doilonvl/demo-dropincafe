@@ -145,6 +145,17 @@ export default function Footer() {
                     maps.app.goo.gl/m1dF4toG6xPYLGdQ9
                   </a>
                 </p>
+                <p className="flex items-center gap-2">
+                  <ExternalLink className="h-5 w-5 text-slate-500" />
+                  <a
+                    href="https://dropincafe.tawk.help"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition hover:text-amber-600"
+                  >
+                    {t("helpCenter")}
+                  </a>
+                </p>
               </div>
             </div>
 
