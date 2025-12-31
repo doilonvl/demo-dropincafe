@@ -17,6 +17,10 @@
       "item4": {
         "name": "Hân hoan cuối tuần",
         "description": "Gác bên nhỏ, ánh đèn vàng và bánh ngọt cho một cuối tuần ấm áp."
+      },
+      "item5": {
+        "name": "Cà phê trứng ngon nhất Hà Nội",
+        "description": "Cà phê trứng ngon nhất Hà Nội."
       }
     },
     "hero": {

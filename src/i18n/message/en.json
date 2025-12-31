@@ -17,6 +17,10 @@
       "item4": {
         "name": "Weekend date",
         "description": "A cozy table, golden lights, and sweets for a warm meetup."
+      },
+      "item5": {
+        "name": "Best Eggs coffee in Hanoi",
+        "description": "Best Eggs coffee in Hanoi."
       }
     },
     "hero": {

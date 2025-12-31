@@ -224,6 +224,12 @@ export default async function HomePage() {
       img: "/Home/home4.jpg",
       route: getProductDetailPath(locale, "classic-latte"),
     },
+    {
+      name: t("slider.item5.name"),
+      description: t("slider.item5.description"),
+      img: "/Home/home6.png",
+      route: getProductDetailPath(locale, "classic-latte"),
+    },
   ];
 
   const hero = {
