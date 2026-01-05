@@ -11,6 +11,14 @@ export const pathnames = {
     vi: "/san-pham/[slug]",
     en: "/products/[slug]",
   },
+  "/blog": {
+    vi: "/blog",
+    en: "/blog",
+  },
+  "/blog/[slug]": {
+    vi: "/blog/[slug]",
+    en: "/blog/[slug]",
+  },
   "/admin": {
     vi: "/admin",
     en: "/admin",
@@ -18,6 +26,18 @@ export const pathnames = {
   "/admin/products": {
     vi: "/admin/products",
     en: "/admin/products",
+  },
+  "/admin/blogs": {
+    vi: "/admin/blogs",
+    en: "/admin/blogs",
+  },
+  "/admin/blogs/new": {
+    vi: "/admin/blogs/new",
+    en: "/admin/blogs/new",
+  },
+  "/admin/blogs/[id]": {
+    vi: "/admin/blogs/[id]",
+    en: "/admin/blogs/[id]",
   },
 } as const;
 

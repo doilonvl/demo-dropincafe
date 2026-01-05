@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "dropincafe.com.vn" },
       { protocol: "https", hostname: "upload.wikimedia.org" },
       { protocol: "https", hostname: "cdn.example.com" },
+      { protocol: "https", hostname: "example.com" },
     ],
   },
 };

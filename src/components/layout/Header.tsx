@@ -43,6 +43,7 @@ export default function Header() {
       { label: t("products"), href: "/products" },
       { label: t("about"), target: "story" },
       { label: t("contact"), target: "contact" },
+      { label: t("blog"), href: "/blog" },
     ],
     [t]
   );

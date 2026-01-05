@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { getLocalePrefix } from "@/lib/routes";
@@ -9,12 +9,14 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { hasRefreshTokenCookie, refreshAccessToken } from "@/lib/auth";
 import {
   Boxes,
   LayoutDashboard,
   LogOut,
   ChevronsLeft,
   ChevronsRight,
+  NotebookText,
 } from "lucide-react";
 
 type NavItem = {
@@ -27,6 +29,7 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { key: "dashboard", label: "Dashboard", icon: LayoutDashboard, slug: "" },
   { key: "products", label: "Quản lý sản phẩm", icon: Boxes, slug: "products" },
+  { key: "blogs", label: "Blogs", icon: NotebookText, slug: "blogs" },
 ];
 
 export default function AdminShell({
@@ -46,11 +49,35 @@ export default function AdminShell({
     if (typeof window === "undefined") return false;
     return localStorage.getItem("admin.sidebar") === "collapsed";
   });
+  const refreshInFlightRef = useRef(false);
 
   useEffect(() => {
     if (collapsed) localStorage.setItem("admin.sidebar", "collapsed");
     else localStorage.removeItem("admin.sidebar");
   }, [collapsed]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let mounted = true;
+
+    const attemptRefresh = async () => {
+      if (!mounted || refreshInFlightRef.current) return;
+      if (!hasRefreshTokenCookie()) return;
+      refreshInFlightRef.current = true;
+      try {
+        await refreshAccessToken();
+      } finally {
+        refreshInFlightRef.current = false;
+      }
+    };
+
+    void attemptRefresh();
+    const interval = window.setInterval(attemptRefresh, 10 * 60 * 1000);
+    return () => {
+      mounted = false;
+      window.clearInterval(interval);
+    };
+  }, []);
 
   async function handleLogout() {
     try {
@@ -61,6 +88,9 @@ export default function AdminShell({
     } catch (err) {
       console.error("logout failed", err);
     } finally {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("access_token");
+      }
       router.replace(loginPath);
     }
   }
@@ -200,3 +230,5 @@ export default function AdminShell({
     </div>
   );
 }
+
+

@@ -82,13 +82,29 @@ export default function LanguageSwitcher({
     );
   }, [params]);
 
+  const getSlugOverride = (target: Locale) => {
+    if (typeof window === "undefined") return undefined;
+    const win = window as typeof window & {
+      __BLOG_SLUGS__?: Record<string, string>;
+    };
+    return win.__BLOG_SLUGS__?.[target];
+  };
+
   const goLocale = (target: Locale) => {
     if (target === locale) return;
 
     const needsParams = pathname.includes("[");
     const hrefBase =
       needsParams && routeParams
-        ? { pathname, params: routeParams }
+        ? {
+            pathname,
+            params: {
+              ...routeParams,
+              ...(routeParams.slug && getSlugOverride(target)
+                ? { slug: getSlugOverride(target) as string }
+                : {}),
+            },
+          }
         : { pathname };
     const hrefWithQuery = queryObject
       ? { ...hrefBase, query: queryObject }

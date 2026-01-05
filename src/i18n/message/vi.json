@@ -52,9 +52,32 @@
     "products": "Sản phẩm",
     "about": "Giới thiệu",
     "contact": "Liên hệ",
+    "blog": "Blog",
     "menuTitle": "Menu quán",
     "openMenu": "Mở menu",
     "close": "Đóng"
+  },
+  "blog": {
+    "metaTitle": "Blog | DropInCafe",
+    "metaDescription": "Câu chuyện, cập nhật và ghi chú từ Drop In Cafe.",
+    "title": "Blog",
+    "subtitle": "Câu chuyện, cập nhật và ghi chú từ Drop In Cafe.",
+    "tagLabel": "Tag:",
+    "emptyTitle": "Chưa có bài viết",
+    "emptyBody": "Chúng tôi đang chuẩn bị bài viết đầu tiên. Hãy quay lại sớm để xem cập nhật mới.",
+    "empty": "Chưa có bài viết nào.",
+    "previous": "Trước",
+    "next": "Tiếp",
+    "pageLabel": "Trang {page} / {total}",
+    "latestTitle": "Bài viết mới nhất",
+    "noCover": "Chưa có ảnh bìa",
+    "backToBlog": "Quay lại blog",
+    "updatedLabel": "Cập nhật:",
+    "byLabel": "Đăng bởi",
+    "viewsLabel": "lượt xem",
+    "tocTitle": "Mục lục",
+    "tocButton": "Mục lục",
+    "seeAll": "Xem tất cả"
   },
   "bestSellers": {
     "eyebrow": "Best Sellers",
@@ -280,3 +303,5 @@
     ]
   }
 }
+
+
