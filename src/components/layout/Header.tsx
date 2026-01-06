@@ -145,6 +145,9 @@ export default function Header() {
         </Link>
 
         <div className="pointer-events-auto flex items-center gap-3">
+          <div className="md:hidden">
+            <LanguageSwitcher />
+          </div>
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <SheetTrigger
               asChild
@@ -191,9 +194,6 @@ export default function Header() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-5 rounded-lg bg-white/5 px-3 py-2 ring-1 ring-white/5">
-                  <LanguageSwitcher />
-                </div>
               </nav>
             </SheetContent>
           </Sheet>
