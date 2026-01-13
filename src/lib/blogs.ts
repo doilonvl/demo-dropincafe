@@ -24,7 +24,7 @@ export function formatDate(value: string | null | undefined, locale: Locale) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "";
   try {
-    return new Intl.DateTimeFormat(locale === "en" ? "en-US" : "vi-VN", {
+    return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "vi-VN", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",

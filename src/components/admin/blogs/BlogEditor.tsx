@@ -325,7 +325,6 @@ export default function BlogEditor({
         };
       }
 
-
       if (coverUrl.trim()) {
         payload.coverImage = {
           url: coverUrl.trim(),
@@ -633,6 +632,27 @@ export default function BlogEditor({
     router.back();
   };
 
+  const actionButtons = (
+    <>
+      <Button variant="outline" onClick={handleCancel}>
+        Cancel
+      </Button>
+      <Button
+        variant="outline"
+        onClick={handleSaveDraft}
+        disabled={saving || autoSaving || coverUploading || ogUploading}
+      >
+        Save draft
+      </Button>
+      <Button
+        onClick={handleSave}
+        disabled={saving || autoSaving || coverUploading || ogUploading}
+      >
+        {saving ? "Saving..." : "Save changes"}
+      </Button>
+    </>
+  );
+
   if (accessDenied) {
     return (
       <Card className="p-6">
@@ -645,7 +665,7 @@ export default function BlogEditor({
   }
 
   return (
-    <div className="space-y-6">
+    <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-xl font-semibold">
@@ -678,12 +698,17 @@ export default function BlogEditor({
         ) : null}
       </div>
 
-      <Separator />
+      <Separator className="my-6" />
 
       {loading ? (
         <Card className="p-6">Loading...</Card>
       ) : (
-        <>
+        <div className="space-y-6">
+          {embedded ? (
+            <div className="sticky top-0 z-10 flex items-center justify-end gap-2 border-b border-slate-200 bg-white/95 py-2 backdrop-blur">
+              {actionButtons}
+            </div>
+          ) : null}
           <div className="grid gap-6 lg:grid-cols-3">
             <div className="grid gap-4 lg:col-span-2">
               <div className="grid gap-3">
@@ -1036,25 +1061,12 @@ export default function BlogEditor({
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-2">
-            <Button variant="outline" onClick={handleCancel}>
-              Cancel
-            </Button>
-            <Button
-              variant="outline"
-              onClick={handleSaveDraft}
-              disabled={saving || autoSaving || coverUploading || ogUploading}
-            >
-              Save draft
-            </Button>
-            <Button
-              onClick={handleSave}
-              disabled={saving || autoSaving || coverUploading || ogUploading}
-            >
-              {saving ? "Saving..." : "Save changes"}
-            </Button>
-          </div>
-        </>
+          {!embedded ? (
+            <div className="flex items-center justify-end gap-2">
+              {actionButtons}
+            </div>
+          ) : null}
+        </div>
       )}
     </div>
   );
