@@ -37,6 +37,14 @@
       "loading": "Đang tải Signature Lineup...",
       "empty": "Hiện chưa có sản phẩm nào được đánh dấu Signature Lineup."
     },
+    "menuCta": {
+      "eyebrow": "Menu quán",
+      "title": "Xem menu nhanh",
+      "description": "Chạm vào ảnh để phóng to hoặc mở menu đầy đủ để xem chi tiết.",
+      "viewImage": "Xem ảnh menu",
+      "viewFull": "Mở menu đầy đủ",
+      "imageAlt": "Ảnh menu Drop In Cafe"
+    },
     "scrollStroke": {
       "card1Title": "Ghé chơi, thảnh thơi tận hưởng",
       "card1Body": "Không cần đặt trước, không cần vội vã. Bạn chỉ cần ghé DropInCafe, chọn một góc ngồi ưng ý bên Phố Đường Tàu và để chúng tôi phục vụ tận bàn. Một ly Cà phê Trứng thơm lừng và khung cảnh độc nhất là tất cả những gì bạn cần.",
@@ -49,11 +57,11 @@
     }
   },
   "header": {
-    "products": "Sản phẩm",
+    "products": "Menu",
     "about": "Giới thiệu",
     "contact": "Liên hệ",
     "blog": "Blog",
-    "menuTitle": "Menu quán",
+    "menuTitle": "Khám phá",
     "openMenu": "Mở menu",
     "close": "Đóng"
   },
@@ -303,5 +311,4 @@
     ]
   }
 }
-
 

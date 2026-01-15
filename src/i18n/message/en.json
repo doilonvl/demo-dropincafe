@@ -37,6 +37,14 @@
       "loading": "Loading Signature Lineup...",
       "empty": "No drinks are marked as Signature Lineup yet."
     },
+    "menuCta": {
+      "eyebrow": "Cafe menu",
+      "title": "See the menu at a glance",
+      "description": "Tap the image to zoom, or open the full menu for details.",
+      "viewImage": "View menu image",
+      "viewFull": "Browse full menu",
+      "imageAlt": "Drop In Cafe menu"
+    },
     "scrollStroke": {
       "card1Title": "Claim Your Spot, Savor the View",
       "card1Body": "Forget the apps and pre-orders. Just drop in, pick your favorite corner by the Train Street, and let us serve you. Whether you're here for the signature Egg Coffee or the view, we make sure your experience is worth the pause.",
@@ -49,11 +57,11 @@
     }
   },
   "header": {
-    "products": "Products",
+    "products": "Menu",
     "about": "About",
     "contact": "Contact",
     "blog": "Blog",
-    "menuTitle": "Cafe Menu",
+    "menuTitle": "Explore",
     "openMenu": "Open menu",
     "close": "Close"
   },
@@ -291,7 +299,7 @@
       "email": "dropincafehn@gmail.com "
     },
     "rightsTitle": "Exercising your rights",
-    "rightsCopy": "We respond within a reasonable timeframe (typically within 1?2 business days) and may verify your identity to protect your data.",
+    "rightsCopy": "We respond within a reasonable timeframe (typically within 1-2 business days) and may verify your identity to protect your data.",
     "rightsBullets": [
       "Request a copy of the personal data you shared with us.",
       "Ask for corrections to inaccurate or incomplete information.",

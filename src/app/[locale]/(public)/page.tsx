@@ -343,9 +343,7 @@ export default async function HomePage() {
         <BestSellersSection items={bestSellerProducts} />
       </FadeIn>
 
-      <FadeIn direction="right">
-        <HomeStoryAndStats />
-      </FadeIn>
+      <HomeStoryAndStats />
 
       <section>
         <ScrollStrokePage />

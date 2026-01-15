@@ -13,6 +13,7 @@ import type {
 } from "@/types/content";
 import { getSiteUrl } from "@/lib/env";
 import { getLocalePrefix, getProductsListingPath } from "@/lib/routes";
+import { ZoomIn } from "lucide-react";
 
 type Category = "all" | ProductCategory;
 
@@ -27,7 +28,6 @@ interface ProductCardData {
   badge?: string;
 }
 
-// Đã sửa lỗi hiển thị tiếng Việt
 const CATEGORY_LABELS: Record<ProductCategory, { vi: string; en: string }> = {
   coffee: { vi: "Cà phê", en: "Coffee" },
   espresso: { vi: "Espresso", en: "Espresso" },
@@ -56,13 +56,18 @@ const CATEGORY_ORDER: ProductCategory[] = [
   "other",
 ];
 
-// Đã sửa lỗi hiển thị tiếng Việt
 const COPY: Record<
   Locale,
   {
     bannerEyebrow: string;
     bannerTitle: string;
     bannerDescription: string;
+    menuImageEyebrow: string;
+    menuImageTitle: string;
+    menuImageHint: string;
+    menuImageCta: string;
+    menuImageAlt: string;
+    menuImageClose: string;
     sectionEyebrow: string;
     sectionTitle: string;
     sectionDescription: string;
@@ -76,6 +81,12 @@ const COPY: Record<
 > = {
   vi: {
     bannerEyebrow: "Drop In Cafe",
+    menuImageEyebrow: "Menu quán",
+    menuImageTitle: "Ảnh menu tại quán",
+    menuImageHint: "Chạm để phóng to",
+    menuImageCta: "Phóng to menu",
+    menuImageAlt: "Menu Drop In Cafe",
+    menuImageClose: "Đóng",
     bannerTitle: "Menu thức uống",
     bannerDescription:
       "Ngồi bên đường tàu Hà Nội, nhâm nhi cà phê, trà hoặc món signature hợp mood tại Drop In Cafe.",
@@ -93,6 +104,12 @@ const COPY: Record<
   },
   en: {
     bannerEyebrow: "Drop In Cafe",
+    menuImageEyebrow: "Menu",
+    menuImageTitle: "Cafe menu image",
+    menuImageHint: "Tap to zoom",
+    menuImageCta: "Zoom menu",
+    menuImageAlt: "Drop In Cafe menu",
+    menuImageClose: "Close",
     bannerTitle: "Drink menu",
     bannerDescription:
       "Sip coffee or tea right by the Hanoi Train Street and pick a signature drink that fits your mood at Drop In Cafe.",
@@ -206,6 +223,7 @@ export default function ProductsPageClient({
     "";
   const [slugFilter, setSlugFilter] = useState(initialSlugFilter);
   const [category, setCategory] = useState<Category>("all");
+  const [isMenuImageOpen, setIsMenuImageOpen] = useState(false);
   const INITIAL_VISIBLE = 8;
   const LOAD_STEP = 8;
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
@@ -270,6 +288,15 @@ export default function ProductsPageClient({
     resolvedSlugProduct?.shortDescription ||
     resolvedSlugProduct?.description ||
     copy.bannerDescription;
+  const menuImage = {
+    eyebrow: copy.menuImageEyebrow,
+    title: copy.menuImageTitle,
+    hint: copy.menuImageHint,
+    cta: copy.menuImageCta,
+    alt: copy.menuImageAlt,
+    close: copy.menuImageClose,
+  };
+  const menuImageSrc = "/Product/menu1.jpg";
 
   const availableCategories = useMemo(() => {
     const set = new Set<ProductCategory>();
@@ -288,6 +315,21 @@ export default function ProductsPageClient({
       setCategory("all");
     }
   }, [availableCategories, category]);
+
+  useEffect(() => {
+    if (!isMenuImageOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMenuImageOpen(false);
+      }
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [isMenuImageOpen]);
 
   const filterOptions = useMemo(() => {
     const options = availableCategories.map((c) => ({
@@ -424,9 +466,33 @@ export default function ProductsPageClient({
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-700 md:text-sm">
             {copy.sectionEyebrow}
           </p>
-          <h2 className="mt-2 text-2xl font-semibold text-neutral-900 md:text-3xl lg:text-4xl">
-            {copy.sectionTitle}
-          </h2>
+          <div className="mt-2 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 md:flex md:flex-wrap md:items-center md:gap-4">
+            <h2 className="text-2xl font-semibold text-neutral-900 md:text-3xl lg:text-4xl">
+              {copy.sectionTitle}
+            </h2>
+            <button
+              type="button"
+              onClick={() => setIsMenuImageOpen(true)}
+              aria-label={menuImage.cta}
+              className="group relative shrink-0 cursor-zoom-in self-start transition-transform duration-300 hover:-translate-y-0.5 hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 md:self-center"
+            >
+              <div className="relative h-11 w-16 overflow-hidden rounded-lg md:h-16 md:w-24">
+                <Image
+                  src={menuImageSrc}
+                  alt={menuImage.alt}
+                  fill
+                  sizes="120px"
+                  className="object-contain transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <span className="absolute inset-x-0 bottom-0 flex items-center justify-center rounded-b-lg bg-black/60 px-2 py-1 text-white opacity-0 transition-opacity duration-300 group-active:opacity-100 group-focus-visible:opacity-100 md:hidden">
+                <ZoomIn className="h-3 w-3" />
+              </span>
+              <span className="absolute inset-x-0 bottom-0 hidden rounded-b-lg bg-black/60 px-2 py-1 text-[10px] font-semibold text-white opacity-0 transition-opacity duration-300 md:block md:group-hover:opacity-100 md:group-focus-visible:opacity-100">
+                {menuImage.cta}
+              </span>
+            </button>
+          </div>
           <p className="mt-3 max-w-2xl text-sm text-neutral-600 md:text-base">
             {copy.sectionDescription}
           </p>
@@ -496,6 +562,38 @@ export default function ProductsPageClient({
           )}
         </div>
       </main>
+
+      {isMenuImageOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          onClick={() => setIsMenuImageOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-[95vw] sm:max-w-5xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setIsMenuImageOpen(false)}
+              className="absolute right-3 top-3 z-10 inline-flex items-center justify-center rounded-full border border-white/20 bg-black/60 px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              {menuImage.close}
+            </button>
+            <div className="w-full rounded-2xl bg-neutral-900 p-3 sm:p-4">
+              <Image
+                src={menuImageSrc}
+                alt={menuImage.alt}
+                width={720}
+                height={509}
+                sizes="(min-width: 1024px) 900px, 95vw"
+                className="h-auto w-full max-h-[80vh] object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
