@@ -5,6 +5,7 @@ import { getLocale } from "next-intl/server";
 import { Caladea } from "next/font/google";
 import { getSiteUrl } from "@/lib/env";
 import TawkTo from "@/components/TawkTo";
+import Script from "next/script";
 
 const caladea = Caladea({
   subsets: ["latin"],
@@ -44,10 +45,25 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const locale = await getLocale();
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
   return (
     <html lang={locale} suppressHydrationWarning className={caladea.variable}>
       <body>
         <Providers>{children}</Providers>
+        {gaId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaId}');`}
+            </Script>
+          </>
+        )}
         <TawkTo />
       </body>
     </html>
