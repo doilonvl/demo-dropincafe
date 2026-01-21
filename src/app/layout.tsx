@@ -46,6 +46,7 @@ export default async function RootLayout({
 }) {
   const locale = await getLocale();
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const adsId = "AW-1020502103";
   return (
     <html lang={locale} suppressHydrationWarning className={caladea.variable}>
       <body>
@@ -60,7 +61,8 @@ export default async function RootLayout({
               {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', '${gaId}');`}
+gtag('config', '${gaId}');
+gtag('config', '${adsId}');`}
             </Script>
           </>
         )}
