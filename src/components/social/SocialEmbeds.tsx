@@ -106,9 +106,9 @@ export default function SocialEmbeds() {
               <div className="mb-2 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <img
-                    src="/Logo/Logo13.jpg"
+                    src="/Logo/Logo0.png"
                     alt="Drop In Cafe"
-                    className="h-7 w-7 rounded-full object-cover"
+                    className="h-7 w-7 rounded-full object-cover object-[50%_30%]"
                   />
                   <div className="leading-tight">
                     <div className="text-sm font-semibold text-neutral-900">

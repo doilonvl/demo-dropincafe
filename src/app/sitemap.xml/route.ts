@@ -108,10 +108,19 @@ export async function GET() {
     },
   ];
 
-  const [viProducts, enProducts] = await Promise.all([
-    fetchProductSlugs("vi"),
-    fetchProductSlugs("en"),
-  ]);
+  let viProducts: Array<{ slug: string; updatedAt?: string }> = [];
+  let enProducts: Array<{ slug: string; updatedAt?: string }> = [];
+
+  try {
+    [viProducts, enProducts] = await Promise.all([
+      fetchProductSlugs("vi"),
+      fetchProductSlugs("en"),
+    ]);
+  } catch {
+    // If the API is unavailable during build, fall back to static URLs only.
+    viProducts = [];
+    enProducts = [];
+  }
 
   const productUrls: SitemapUrl[] = [
     ...viProducts.map((item) => ({

@@ -177,7 +177,7 @@ export default async function HomePage() {
         name: "Drop In Cafe",
         alternateName: alternateNames,
         url: pageUrl,
-        image: `${baseUrl}/Logo/Logo13.jpg`,
+        image: `${baseUrl}/Logo/Logo0.png`,
         address: {
           addressLocality: "Hanoi",
           addressCountry: "VN",

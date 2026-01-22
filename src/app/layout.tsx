@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   title: { default: "Drop In Cafe", template: "%s | Drop In Cafe" },
   icons: {
     icon: [
-      { url: "/favicon.png", type: "image/png", sizes: "96x96" },
       { url: "/favicon.ico" },
+      { url: "/favicon.png", type: "image/png", sizes: "96x96" },
     ],
     shortcut: "/favicon.ico",
     apple: "/apple-icon.png",

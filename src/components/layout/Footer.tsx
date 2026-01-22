@@ -78,9 +78,9 @@ export default function Footer() {
             <div className="space-y-5">
               <div className="flex items-center gap-3">
                 <img
-                  src="/Logo/Logo13.jpg"
+                  src="/Logo/Logo0.png"
                   alt="Drop In Cafe"
-                  className="h-12 w-12 rounded-full border border-amber-200 object-cover shadow-sm"
+                  className="h-12 w-12 rounded-full border border-amber-200 object-cover object-[50%_30%] shadow-sm"
                 />
                 <div>
                   <p className="text-base font-semibold text-slate-950">

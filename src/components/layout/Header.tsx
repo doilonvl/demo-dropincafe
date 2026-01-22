@@ -132,14 +132,14 @@ export default function Header() {
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 text-white">
-        <Link href={homeHref} className="pointer-events-auto">
+      <div className="mx-auto flex max-w-6xl items-start justify-between px-4 py-2 text-white md:py-3">
+        <Link href={homeHref} className="pointer-events-auto pt-1 md:pt-0">
           <Image
-            src="/Logo/Logo13.jpg"
+            src="/Logo/Logo0.png"
             alt="Drop In Cafe"
-            width={220}
-            height={78}
-            className="h-12 w-auto rounded-full border border-white/30 object-cover shadow"
+            width={96}
+            height={96}
+            className="h-16 w-16 rounded-full border border-amber-200 object-cover shadow-sm md:h-20 md:w-20"
             priority
           />
         </Link>
