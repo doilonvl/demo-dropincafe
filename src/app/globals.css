@@ -131,6 +131,11 @@
   } */
 }
 
+/* Home hero logo contrast on slider */
+.hero-logo-img {
+  filter: none;
+}
+
 /* Product Showcase Styles */
 .work {
   display: grid;

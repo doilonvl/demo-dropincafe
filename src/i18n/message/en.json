@@ -7,8 +7,8 @@
         "description": "Sip coffee by Hanoi Train Street and hear the carriage rumble past."
       },
       "item2": {
-        "name": "Golden morning",
-        "description": "Open your laptop, grab a coffee, and start the day in a sunlit space."
+        "name": "Inside the cafe",
+        "description": "Warm, cozy seating and soft light for lingering chats or focused work."
       },
       "item3": {
         "name": "Chill afternoon",
@@ -25,7 +25,7 @@
     },
     "hero": {
       "title": "Drop In Cafe",
-      "line1": "Australian & Vietnamese coffee culture in Hanoi Old Quarter.",
+      "line1": "Australian \u0026 Vietnamese coffee culture in Hanoi Old Quarter.",
       "line2": "Our famous egg coffee is a must-try.",
       "line3": "Right across from the historic Train Street.",
       "line4": "Visit for a truly unique cafe experience.",
@@ -47,7 +47,7 @@
     },
     "scrollStroke": {
       "card1Title": "Claim Your Spot, Savor the View",
-      "card1Body": "Forget the apps and pre-orders. Just drop in, pick your favorite corner by the Train Street, and let us serve you. Whether you're here for the signature Egg Coffee or the view, we make sure your experience is worth the pause.",
+      "card1Body": "Forget the apps and pre-orders. Just drop in, pick your favorite corner by the Train Street, and let us serve you. Whether you\u0027re here for the signature Egg Coffee or the view, we make sure your experience is worth the pause.",
       "card2Title": "Heavy Workload? Find Your Flow Here",
       "card2Body": "When emails and deadlines pile up, let DropInCafe keep you steady. Our seamless service ensures your tea or coffee arrives exactly when you need a boost, letting you stay focused on your screen while the train rolls by.",
       "img1Alt": "Guest scanning to pick up a pre-ordered drink at DropInCafe",
@@ -108,7 +108,7 @@
   },
   "footer": {
     "brandName": "Drop In Cafe",
-    "brandTagline": "Coffee & Chill in Old Quarter",
+    "brandTagline": "Coffee \u0026 Chill in Old Quarter",
     "address": "163 Phung Hung, Cua Dong, Hoan Kiem, Ha Noi",
     "hoursLabel": "Hours",
     "statusOpen": "Open now",
@@ -184,7 +184,7 @@
     "sections": [
       {
         "id": "scope",
-        "title": "1. Scope & applicability",
+        "title": "1. Scope \u0026 applicability",
         "summary": "This policy covers information we collect whenever you interact with Drop In Cafe.",
         "items": [
           "Applies when you visit dropincafe.com.vn, submit contact forms, call, email, message us on social channels, or speak with us at the cafe.",
@@ -215,7 +215,7 @@
       },
       {
         "id": "cookies",
-        "title": "4. Cookies & tracking",
+        "title": "4. Cookies \u0026 tracking",
         "items": [
           "We use cookies to remember preferences, measure engagement, and optimize site performance.",
           "You can disable cookies in your browser. Some features may be limited when cookies are turned off."

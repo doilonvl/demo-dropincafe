@@ -7,8 +7,8 @@
         "description": "Nhâm nhi cà phê cạnh đường tàu Hà Nội, nghe tiếng tàu lăn qua."
       },
       "item2": {
-        "name": "Buổi sáng nắng vàng",
-        "description": "Mở laptop, gọi một ly cà phê và bắt đầu ngày mới trong không gian tràn nắng."
+        "name": "Không gian trong quán",
+        "description": "Không gian ấm cúng, ánh sáng dịu dàng nơi người lặng trò chuyện hoặc làm việc."
       },
       "item3": {
         "name": "Chiều chill cùng nhạc",
@@ -108,7 +108,7 @@
   },
   "footer": {
     "brandName": "Drop In Cafe",
-    "brandTagline": "Cà phê & chill ở Phố Cổ",
+    "brandTagline": "Cà phê \u0026 chill ở Phố Cổ",
     "address": "163 Phùng Hưng, Cửa Đông, Hoàn Kiếm, Hà Nội",
     "hoursLabel": "Giờ hoạt động",
     "statusOpen": "Đang mở cửa",
@@ -187,7 +187,7 @@
     "sections": [
       {
         "id": "scope",
-        "title": "1. Phạm vi & đối tượng áp dụng",
+        "title": "1. Phạm vi \u0026 đối tượng áp dụng",
         "summary": "Chính sách này áp dụng cho mọi thông tin chúng tôi thu thập khi bạn tương tác với Drop In Cafe.",
         "items": [
           "Áp dụng khi bạn truy cập dropincafe.com.vn, điền form liên hệ, gọi điện, email, nhắn tin mạng xã hội hoặc trao đổi trực tiếp tại quán.",
@@ -218,7 +218,7 @@
       },
       {
         "id": "cookies",
-        "title": "4. Cookies & công nghệ theo dõi",
+        "title": "4. Cookies \u0026 công nghệ theo dõi",
         "items": [
           "Chúng tôi dùng cookie để ghi nhớ tuỳ chọn, đo lường tương tác và tối ưu hiệu suất website.",
           "Bạn có thể tắt cookie trong cài đặt trình duyệt; một số tính năng có thể bị hạn chế khi cookie bị vô hiệu."
@@ -311,4 +311,3 @@
     ]
   }
 }
-

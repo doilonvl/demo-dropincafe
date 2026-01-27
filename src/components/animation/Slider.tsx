@@ -30,6 +30,7 @@ export default function ProductSlider({
   const textRef = useRef<HTMLDivElement | null>(null);
   const [index, setIndex] = useState(() => items.length || 0);
   const [isDragging, setIsDragging] = useState(false);
+  const [textColor, setTextColor] = useState<"light" | "dark">("light");
   const dragRef = useRef({
     startX: 0,
     dragging: false,
@@ -151,6 +152,57 @@ export default function ProductSlider({
 
   const current = items[((index % total) + total) % total];
 
+  // derive text color from current image brightness
+  useEffect(() => {
+    const imgSrc = current?.img;
+    if (!imgSrc) return;
+
+    const img = new Image();
+    img.src = imgSrc;
+
+    img.onload = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        const sampleSize = 32;
+        canvas.width = sampleSize;
+        canvas.height = sampleSize;
+        ctx.drawImage(img, 0, 0, sampleSize, sampleSize);
+        const data = ctx.getImageData(0, 0, sampleSize, sampleSize).data;
+        let totalLuminance = 0;
+        const count = data.length / 4;
+
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          // perceived luminance
+          totalLuminance += 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        }
+
+        const avg = totalLuminance / count;
+        setTextColor(avg > 140 ? "dark" : "light");
+      } catch {
+        setTextColor("light");
+      }
+    };
+
+    img.onerror = () => setTextColor("light");
+  }, [current?.img]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const root = document.documentElement;
+    root.dataset.heroTone = textColor;
+    return () => {
+      if (root.dataset.heroTone === textColor) {
+        delete root.dataset.heroTone;
+      }
+    };
+  }, [textColor]);
+
   return (
     <section className="slider relative w-full overflow-hidden">
       <div
@@ -184,14 +236,28 @@ export default function ProductSlider({
       </div>
 
       <div
-        className="slider-text pointer-events-none absolute inset-0 grid place-items-center px-6 text-center"
+        className="slider-text pointer-events-none absolute bottom-0 left-0 px-6 pb-8 text-left sm:px-10 sm:pb-12"
         ref={textRef}
       >
-        <div className="max-w-2xl space-y-1.5 px-8 py-6 text-white shadow-2xl backdrop-blur-[1px]">
-          <h3 className="slider-title text-4xl sm:text-5xl font-bold tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
+        <div
+          className={`max-w-sm space-y-1 px-4 py-3 ${
+            textColor === "dark" ? "text-stone-900" : "text-white"
+          }`}
+          style={{
+            textShadow:
+              textColor === "dark"
+                ? "0 1px 6px rgba(255,255,255,0.45)"
+                : "0 2px 10px rgba(0,0,0,0.45)",
+          }}
+        >
+          <h3 className="slider-title text-2xl sm:text-3xl font-semibold tracking-tight">
             {current.name}
           </h3>
-          <p className="slider-desc text-lg sm:text-xl text-white/90 drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)]">
+          <p
+            className={`slider-desc text-sm sm:text-base ${
+              textColor === "dark" ? "text-stone-800" : "text-white/85"
+            }`}
+          >
             {current.description}
           </p>
         </div>

@@ -134,14 +134,16 @@ export default function Header() {
     >
       <div className="mx-auto flex max-w-6xl items-start justify-between px-4 py-2 text-white md:py-3">
         <Link href={homeHref} className="pointer-events-auto pt-1 md:pt-0">
-          <Image
-            src="/Logo/Logo0.png"
-            alt="Drop In Cafe"
-            width={96}
-            height={96}
-            className="h-16 w-16 rounded-full border border-amber-200 object-cover shadow-sm md:h-20 md:w-20"
-            priority
-          />
+          <div className="hero-logo-shell h-16 w-16 rounded-full border border-white/90 bg-white shadow-[0_10px_26px_rgba(0,0,0,0.35)] md:h-20 md:w-20">
+            <Image
+              src="/Logo/Logo0.png"
+              alt="Drop In Cafe"
+              width={96}
+              height={96}
+              className="hero-logo-img h-full w-full rounded-full object-cover"
+              priority
+            />
+          </div>
         </Link>
 
         <div className="pointer-events-auto flex items-center gap-3">

@@ -7,7 +7,7 @@ import ProductShowcase from "@/components/animation/ProductShowcase";
 import TextOnScroll from "@/components/animation/TextOnScroll";
 import BestSellersSection from "@/components/home/BestSellers";
 import HomeStoryAndStats from "@/components/home/HomeStory";
-import { StackSlider } from "@/components/animation/StackSlider";
+import ProductSlider from "@/components/animation/Slider";
 import FadeIn from "@/components/animation/FadeIn";
 import ScrollStrokePage from "@/components/animation/ScrollStrokePage";
 import { getProductDetailPath, getProductsListingPath } from "@/lib/routes";
@@ -130,7 +130,7 @@ const FALLBACK_SIGNATURE_ITEMS: ShowcaseSeedItem[] = [
 
 function mapProductsToShowcaseItems(
   products: Product[],
-  locale: Locale
+  locale: Locale,
 ): ShowcaseItem[] {
   const fallbackImg = "/Signature/1.jpg";
 
@@ -203,7 +203,7 @@ export default async function HomePage() {
     {
       name: t("slider.item1.name"),
       description: t("slider.item1.description"),
-      img: "/Home/home1.jpg",
+      img: "/Home/home1.png",
       route: getProductDetailPath(locale, "signature-blend"),
     },
     {
@@ -215,7 +215,7 @@ export default async function HomePage() {
     {
       name: t("slider.item3.name"),
       description: t("slider.item3.description"),
-      img: "/Home/home5.jpg",
+      img: "/Home/home5.png",
       route: getProductDetailPath(locale, "caramel-macchiato"),
     },
     {
@@ -250,11 +250,6 @@ export default async function HomePage() {
     empty: t("signature.empty"),
   };
 
-  const stackSliderSlides = sliderItems.slice(0, 6).map((item) => ({
-    title: item.name,
-    image: item.img,
-  }));
-
   let signatureProducts: Product[] = [];
   let bestSellerProducts: Product[] = [];
 
@@ -288,13 +283,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
       />
 
-      {stackSliderSlides.length > 0 && (
-        <section className="stack-slider-section py-12 text-stone-900 relative">
-          <div className="mx-auto mt-6 max-w-6xl px-4">
-            <StackSlider slides={stackSliderSlides} />
-          </div>
-        </section>
-      )}
+      {sliderItems.length > 0 && <ProductSlider items={sliderItems} />}
 
       <section className="bg-linear-to-r from-amber-500 to-rose-400 text-white">
         <FadeIn direction="right">
