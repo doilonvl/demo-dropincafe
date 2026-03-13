@@ -60,6 +60,7 @@ const CATEGORY_OPTIONS: { value: ProductCategory; label: string }[] = [
   { value: "matcha", label: "Matcha" },
   { value: "chocolate", label: "Chocolate" },
   { value: "cake", label: "Cake & Dessert" },
+  { value: "pantry", label: "Pantry" },
   { value: "other drinks", label: "Other Drinks" },
 ];
 

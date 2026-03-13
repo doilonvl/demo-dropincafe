@@ -39,6 +39,7 @@ const CATEGORY_LABELS: Record<ProductCategory, { vi: string; en: string }> = {
   "other teas": { vi: "Trà khác", en: "Other teas" },
   "other drinks": { vi: "Đồ uống khác", en: "Other drinks" },
   cake: { vi: "Bánh & dessert", en: "Cake & dessert" },
+  pantry: { vi: "Pantry", en: "Pantry" },
   other: { vi: "Khác", en: "Other" },
 };
 
@@ -52,6 +53,7 @@ const CATEGORY_ORDER: ProductCategory[] = [
   "other teas",
   "chocolate",
   "cake",
+  "pantry",
   "other drinks",
   "other",
 ];

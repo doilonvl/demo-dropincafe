@@ -16,7 +16,8 @@ export type ProductCategory =
   | "chocolate"
   | "green teas"
   | "other teas"
-  | "matcha";
+  | "matcha"
+  | "pantry";
 
 export type TemperatureOption = "hot" | "iced";
 
