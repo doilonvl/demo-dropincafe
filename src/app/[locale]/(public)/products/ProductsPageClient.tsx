@@ -225,7 +225,7 @@ export default function ProductsPageClient({
     "";
   const [slugFilter, setSlugFilter] = useState(initialSlugFilter);
   const [category, setCategory] = useState<Category>("all");
-  const [isMenuImageOpen, setIsMenuImageOpen] = useState(false);
+  const [openMenuImage, setOpenMenuImage] = useState<"drinks" | "pastry" | null>(null);
   const INITIAL_VISIBLE = 8;
   const LOAD_STEP = 8;
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
@@ -299,6 +299,7 @@ export default function ProductsPageClient({
     close: copy.menuImageClose,
   };
   const menuImageSrc = "/Product/menu1.jpg";
+  const pastryMenuImageSrc = "/Product/menu2.jfif";
 
   const availableCategories = useMemo(() => {
     const set = new Set<ProductCategory>();
@@ -319,10 +320,10 @@ export default function ProductsPageClient({
   }, [availableCategories, category]);
 
   useEffect(() => {
-    if (!isMenuImageOpen) return;
+    if (!openMenuImage) return;
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsMenuImageOpen(false);
+        setOpenMenuImage(null);
       }
     };
     document.body.style.overflow = "hidden";
@@ -331,7 +332,7 @@ export default function ProductsPageClient({
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
     };
-  }, [isMenuImageOpen]);
+  }, [openMenuImage]);
 
   const filterOptions = useMemo(() => {
     const options = availableCategories.map((c) => ({
@@ -472,28 +473,54 @@ export default function ProductsPageClient({
             <h2 className="text-2xl font-semibold text-neutral-900 md:text-3xl lg:text-4xl">
               {copy.sectionTitle}
             </h2>
-            <button
-              type="button"
-              onClick={() => setIsMenuImageOpen(true)}
-              aria-label={menuImage.cta}
-              className="group relative shrink-0 cursor-zoom-in self-start transition-transform duration-300 hover:-translate-y-0.5 hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 md:self-center"
-            >
-              <div className="relative h-11 w-16 overflow-hidden rounded-lg md:h-16 md:w-24">
-                <Image
-                  src={menuImageSrc}
-                  alt={menuImage.alt}
-                  fill
-                  sizes="120px"
-                  className="object-contain transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <span className="absolute inset-x-0 bottom-0 flex items-center justify-center rounded-b-lg bg-black/60 px-2 py-1 text-white opacity-0 transition-opacity duration-300 group-active:opacity-100 group-focus-visible:opacity-100 md:hidden">
-                <ZoomIn className="h-3 w-3" />
-              </span>
-              <span className="absolute inset-x-0 bottom-0 hidden rounded-b-lg bg-black/60 px-2 py-1 text-[10px] font-semibold text-white opacity-0 transition-opacity duration-300 md:block md:group-hover:opacity-100 md:group-focus-visible:opacity-100">
-                {menuImage.cta}
-              </span>
-            </button>
+            <div className="flex items-center gap-2 self-start md:self-center">
+              {/* Drinks menu thumbnail */}
+              <button
+                type="button"
+                onClick={() => setOpenMenuImage("drinks")}
+                aria-label={menuImage.cta}
+                className="group/thumb relative shrink-0 cursor-zoom-in transition-transform duration-300 hover:-translate-y-0.5 hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+              >
+                <div className="relative h-11 w-16 overflow-hidden rounded-lg md:h-16 md:w-24">
+                  <Image
+                    src={menuImageSrc}
+                    alt={menuImage.alt}
+                    fill
+                    sizes="120px"
+                    className="object-contain transition-transform duration-300 group-hover/thumb:scale-105"
+                  />
+                </div>
+                <span className="absolute inset-x-0 bottom-0 flex items-center justify-center rounded-b-lg bg-black/60 px-2 py-1 text-white opacity-0 transition-opacity duration-300 group-active/thumb:opacity-100 group-focus-visible/thumb:opacity-100 md:hidden">
+                  <ZoomIn className="h-3 w-3" />
+                </span>
+                <span className="absolute inset-x-0 bottom-0 hidden rounded-b-lg bg-black/60 px-2 py-1 text-[10px] font-semibold text-white opacity-0 transition-opacity duration-300 md:block md:group-hover/thumb:opacity-100 md:group-focus-visible/thumb:opacity-100">
+                  {menuImage.cta}
+                </span>
+              </button>
+              {/* Pastry menu thumbnail */}
+              <button
+                type="button"
+                onClick={() => setOpenMenuImage("pastry")}
+                aria-label="Menu Pastry"
+                className="group/thumb relative shrink-0 cursor-zoom-in transition-transform duration-300 hover:-translate-y-0.5 hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+              >
+                <div className="relative h-11 w-16 overflow-hidden rounded-lg md:h-16 md:w-24">
+                  <Image
+                    src={pastryMenuImageSrc}
+                    alt="Menu Pastry Drop In Cafe"
+                    fill
+                    sizes="120px"
+                    className="object-cover transition-transform duration-300 group-hover/thumb:scale-105"
+                  />
+                </div>
+                <span className="absolute inset-x-0 bottom-0 flex items-center justify-center rounded-b-lg bg-black/60 px-2 py-1 text-white opacity-0 transition-opacity duration-300 group-active/thumb:opacity-100 group-focus-visible/thumb:opacity-100 md:hidden">
+                  <ZoomIn className="h-3 w-3" />
+                </span>
+                <span className="absolute inset-x-0 bottom-0 hidden rounded-b-lg bg-black/60 px-2 py-1 text-[10px] font-semibold text-white opacity-0 transition-opacity duration-300 md:block md:group-hover/thumb:opacity-100 md:group-focus-visible/thumb:opacity-100">
+                  Menu Pastry
+                </span>
+              </button>
+            </div>
           </div>
           <p className="mt-3 max-w-2xl text-sm text-neutral-600 md:text-base">
             {copy.sectionDescription}
@@ -565,12 +592,12 @@ export default function ProductsPageClient({
         </div>
       </main>
 
-      {isMenuImageOpen && (
+      {openMenuImage && (
         <div
           role="dialog"
           aria-modal="true"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
-          onClick={() => setIsMenuImageOpen(false)}
+          onClick={() => setOpenMenuImage(null)}
         >
           <div
             className="relative w-full max-w-[95vw] sm:max-w-5xl"
@@ -578,17 +605,17 @@ export default function ProductsPageClient({
           >
             <button
               type="button"
-              onClick={() => setIsMenuImageOpen(false)}
+              onClick={() => setOpenMenuImage(null)}
               className="absolute right-3 top-3 z-10 inline-flex items-center justify-center rounded-full border border-white/20 bg-black/60 px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               {menuImage.close}
             </button>
             <div className="w-full rounded-2xl bg-neutral-900 p-3 sm:p-4">
               <Image
-                src={menuImageSrc}
-                alt={menuImage.alt}
-                width={720}
-                height={509}
+                src={openMenuImage === "pastry" ? pastryMenuImageSrc : menuImageSrc}
+                alt={openMenuImage === "pastry" ? "Menu Pastry Drop In Cafe" : menuImage.alt}
+                width={openMenuImage === "pastry" ? 1080 : 720}
+                height={openMenuImage === "pastry" ? 1350 : 509}
                 sizes="(min-width: 1024px) 900px, 95vw"
                 className="h-auto w-full max-h-[80vh] object-contain"
               />
