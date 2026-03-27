@@ -299,7 +299,7 @@ export default function ProductsPageClient({
     close: copy.menuImageClose,
   };
   const menuImageSrc = "/Product/menu1.jpg";
-  const pastryMenuImageSrc = "/Product/menu2.jfif";
+  const pastryMenuImageSrc = "/Product/menu2.jpg";
 
   const availableCategories = useMemo(() => {
     const set = new Set<ProductCategory>();
